@@ -1,0 +1,25 @@
+# Build intermediates
+build/classes/
+build/classes-lint/
+build/smoke-classes/
+build/lib/
+build/tmp-*/
+build/smoke/
+build/*.log
+build/*.txt
+build/*.json
+build/MANIFEST.MF
+build/javap-entry.txt
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+*.iml
+*.class
+
+# Local secrets / credentials (never commit)
+.env
+*.pem
+*.p12
+credentials.json
