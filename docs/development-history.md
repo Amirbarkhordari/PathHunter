@@ -1,0 +1,43 @@
+# PathHunter development history
+
+Chronological record of PathHunter’s transition from a psychoPATH fork to an independently identified project. Dates use the local Phase work calendar.
+
+## Phase 0 — Initial audit (2026-11-13)
+
+- Cloned `Amirbarkhordari/PathHunter` (then a GitHub fork of `ewilded/psychoPATH`).
+- Confirmed HEAD `e29eb6b` matched upstream history at clone time.
+- Documented architecture, features, limitations, environment, and build approach.
+- Rebuilt sources with `javac --release 8` against Burp Suite Professional 2026.4.3.
+- Created in-process Smoke harness (no external HTTP targets).
+- **No commit/push** in Phase 0.
+
+## Phase 0.1 — Burp loading compatibility (2026-11-13)
+
+- Diagnosed Extender load failure: modern Burp parent-first `burp.*` loading / allowlist behaviour rejected project classes in `package burp`.
+- Relocated implementation classes to `package uk.co.pentest.psychoPATH` under `Java/src/uk/co/pentest/`.
+- Entry class: `uk.co.pentest.psychoPATH.BurpExtender`.
+- User-facing names set to PathHunter; artifact `dist/PathHunter.jar`.
+- Verified with LoadCheck, ProveBlock (`burp.Zv_d`), ScanLikeBurp, Smoke.
+- Documented in `docs/burp-loading-fix.md`.
+- **No commit/push** in Phase 0.1.
+
+## Phase 1 — Independent project identity (2026-11-13)
+
+- Identity audit classifying branding vs attribution vs technical identifiers.
+- Professional README, NOTICE, docs updates.
+- Branding strings for menu and scanner issue titles.
+- Fork-detachment guidance only; Leave fork network **not** executed.
+- **No commit/push** in Phase 1.
+
+## Phase 1.1 — GitHub repository finalization (2026-11-13)
+
+- Updated GitHub repository **description** and **topics** via authenticated REST API.
+- Attempted GraphQL `detachFork`: **field does not exist** on `Mutation` for this API. Official Leave fork network remains a **manual Settings UI** operation.
+- Clean rebuild; LoadCheck 11/11, ProveBlock Pass, ScanLikeBurp 1 candidate, Smoke 29/29.
+- Added CHANGELOG, development history, `.gitignore`, `tools/smoke/` harness sources.
+- Committed Phase 0–1.1 work and pushed to `origin` (`https://github.com/Amirbarkhordari/PathHunter.git`).
+- Upstream remote `https://github.com/ewilded/psychoPATH.git` retained locally.
+
+## License continuity
+
+Throughout all phases: GPL-3.0 (`LICENSE`), original authorship attribution preserved, `NOTICE` records the derivative relationship.

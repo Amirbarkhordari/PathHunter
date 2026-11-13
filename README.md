@@ -1,205 +1,177 @@
-Original work by: Julian H. https://github.com/ewilded/psychoPATH
+# PathHunter
 
-# psychoPATH - a blind webroot file upload & LFI detection tool  (now available in the Burp App Store!)
-![Logo](logo_by_Sponge_Nutter.png?raw=true "Logo by Sponge Nutter")
-## psychoPATH - hunting file uploads & LFI in the dark
-This tool is a highly configurable payload generator detecting LFI & web root file uploads. Involves advanced path traversal evasive techniques, dynamic web root list generation, output encoding, site map-searching payload generator, LFI mode, nix & windows support plus single byte generator. 
+**Independently maintained Burp Suite extension for path traversal, LFI, and file-upload path testing.**
 
-![Demo Screenshot](screenshots/new_ui.png?raw=true "User interface")
+[![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
+[![Burp Suite Extension](https://img.shields.io/badge/Burp%20Suite-Extension-orange.svg)](#installation)
+[![Status: Active development](https://img.shields.io/badge/Status-Active%20development-brightgreen.svg)](#roadmap)
 
-![Demo Screenshot](screenshots/new_ui2.png?raw=true "User interface")
+PathHunter is a Java extension for Burp Suite that helps security testers find **file path traversal**, **local file inclusion (LFI) / arbitrary file read**, and **file-upload path** issues using configurable payload generators, encoding options, and Intruder/Scanner integration.
 
-![Demo Screenshot](screenshots/new_ui3.png?raw=true "User interface")
+---
 
-![Demo Screenshot](screenshots/new_ui4.png?raw=true "User interface")
+## Introduction
 
-![Demo Screenshot](screenshots/new_ui5.png?raw=true "User interface")
+PathHunter generates and applies path-oriented payloads inside Burp Suite so you can probe how an application resolves file paths—especially when filters, encoding, or non-recursive sanitization obscure classic `../` patterns.
 
-![Demo Screenshot](screenshots/new_ui6.png?raw=true "User interface")
+**What it is for**
 
-![Demo Screenshot](screenshots/new_ui7.png?raw=true "User interface")
+- Web application security testing (authorized assessments only)
+- Blind or weakly filtered path traversal and LFI hunting
+- File-upload workflows where the upload directory sits inside or outside the document root
+- Directory discovery tied to Burp’s site map (“Directory checker”)
 
-This tool helps to discover several kinds of vulnerabilities not detected by most known scanners and payload sets:
-- local file inclusion/arbitrary file read vulnerable to path traversal with weak filters involved (e.g. non-recurrent)
-- file upload vulnerable to path traversal with the upload directory located inside the document root
-- file upload vulnerable to path traversal with the upload directory outside the document root
-- file upload not vulnerable to path traversal, but having the upload directory inside of the document root, with no direct links to the uploaded file exposed by the application
+**How it fits Burp Suite**
 
-Also, the `Directory checker` payload generator can be used for other purposes, e.g. selective invasive content discovery or checking allowed HTTP methods per directory. 
+- Loads as a legacy Extender API (`IBurpExtender`) Java extension
+- Adds a **PathHunter** suite tab for configuration
+- Registers Intruder payload generators (path traversal, directory checker, payload marker, byte)
+- Optionally runs an active Scanner check for common LFI indicators
 
-At the moment, this plugin extends Burp Intruder with four payload generators:
-![Demo Screenshot](screenshots/payload_generators.png?raw=true "Payload generators")
+PathHunter is derived from the original **psychoPATH** project and is being actively maintained and enhanced for modern Burp Suite compatibility and future capability growth. Planned work is listed under [Roadmap](#roadmap); only verified behaviour is described under [Current features](#current-features).
 
-### Byte generator
-Additionally, another payload generator simply called `Byte` is available. It simply generates single bytes from the chosen range.
-Available ranges:
-- non-alphanumeric
-- alphanumeric 
-- non-alphanumeric printable
-- non-alphanumeric non-printable
-- all
+---
 
-This is quite handy for general fuzzing, discovering bad characters where feedback from the application is available, defeating filters (like file upload extension control), searching for a an effective string terminator (a character that makes the application to ignore the following string - usually white characters or some format separators like ,',| etc.) and so on.
+## Original project attribution
 
-This generator produces output in accordance to the global psychoPATH output encoding settings (available: none, URL, doubleURL as of writing this).
+PathHunter is a **derivative work** of:
 
-## To see detailed usage examples for all payload generators and scenarios (e.g. LFI hunting), please go to [usage_examples.pdf](https://www.github.com/ewilded/psychoPATH/blob/master/usage_examples.pdf.pdf?raw=true)
+| Item | Value |
+| --- | --- |
+| Original project | **psychoPATH** |
+| Original author | **Julian Horoszkiewicz** (`ewilded`) |
+| Original repository | https://github.com/ewilded/psychoPATH |
+| Original license | **GPL-3.0** |
 
-## Insight into the file upload scenarios
-At this point, controlling the uploaded file contents/extension is not the focus. One thing at a time, first we just want to detect if we can upload a *legitimate* file anywhere in the webroot.
-### 1) Path traversal + upload dir outside the webroot
+The original author’s copyright and license obligations are preserved. This repository does **not** claim that the original psychoPATH codebase was authored by the current maintainer. See `LICENSE`, `NOTICE`, and source-file `@author` / copyright notices.
 
-Let's consider the following vulnerable Java servlet:
+**Current maintainer:** Amir Barkhordari — https://github.com/Amirbarkhordari/PathHunter
 
-        private static final String SAVE_DIR = "/tmp";
-    	protected void doPost(HttpServletRequest request,
-            HttpServletResponse response) throws ServletException, IOException {
-        String appPath = request.getServletContext().getRealPath("");
-        String savePath =  SAVE_DIR;
-        File fileSaveDir = new File(savePath);
-        if (!fileSaveDir.exists()) {
-            fileSaveDir.mkdir(); 
-        }
-        String full_name=SAVE_DIR;
-        for (Part part : request.getParts()) {
-            String fileName = extractFileName(part);
-            part.write(savePath + File.separator + fileName);
-	    full_name=savePath + File.separator + fileName;
-        }
+---
 
+## Current features
 
-The servlet is using user-supplied values as file names (e.g. `a.jpg`). It stores uploaded files in an upload directory `/tmp` located outside the document root (let's assume the document root here is `/var/lib/tomcat8/webapps/uploadbare_traversal_outside_webroot`). 
+The following are present in the current sources and have been exercised by the local rebuild / smoke harness (see `docs/feature-inventory.md` and `docs/test-results.md`). Features marked *payload only* generate strings for Intruder; they do not perform HTTP file uploads by themselves.
 
-In order to get our file saved in the document root instead of the default upload directory, the user-supplied value, instead of benign `a.jpg`, would have to look more like `./../../../../../../../../../../var/lib/tomcat8/webapps/uploadbare_traversal_outside_webroot/a.jpg`.
+| Area | Status | Notes |
+| --- | --- | --- |
+| Path traversal payload generator | Implemented | Configurable roots, targets, suffixes, traversal depth, evasive patterns |
+| LFI / arbitrary file read mode | Implemented | Default LFI mode on; scanner match rules for common file signatures |
+| Active Scanner LFI check | Implemented | Gated by “Enable Scanner checks”; not run against remote hosts in automation |
+| File-upload path scenarios | Payload only | Intruder-driven; covers in-root / out-of-root / no-traversal discovery patterns |
+| Document-root lists (nix / Windows / app servers) | Implemented | Built-in lists; `{TARGET}` substitution (with known edge cases) |
+| Directory checker | Partial | Driven from site-map–derived suffixes; UI list wiring has known gaps |
+| Linux path strategies | Implemented | Nix slashes, `etc/passwd`-style defaults |
+| Windows path strategies | Partial | Win slashes and `win.ini`; some drive / absolute-root UI controls unwired |
+| Output encodings | Partial | RAW, URL (default), double-URL / UTF variants with verified quirks |
+| Evasive traversals / break-up sequences | Implemented | Configurable evasive list and break bytes |
+| Byte generator | Partial | Six ranges; global encoding on byte output not fully wired |
+| Payload marker | Implemented | Fixed-width index for correlating uploads |
+| Payload export / clipboard | Implemented | Save/copy from the UI |
+| Context menu → scope update | Partial | Host propagation works; label/site-map edge cases documented |
+| Modern Burp load (non-`burp` package entry) | Implemented | Entry: `uk.co.pentest.psychoPATH.BurpExtender`; display name **PathHunter** |
 
-Assuming we cannot see any detailed error messages from the application and we have no access to the file system - all we know is that it is running on Apache Tomcat and that the URL is `http://example.org/uploadbare_traversal_outside_webroot`. In order to come up with this particular payload, we would have to try several possible document root variants, like:
+For limitations and defects already identified, see `docs/known-limitations.md`.
 
-- /opt/tomcat8/example
-- /opt/tomcat5/webapps/example.org 
-- /var/lib/tomcat6/webapps/uploadbare_traversal_outside_webroot
-- /var/lib/tomcat7/webapps/uploadbare_traversal_outside_webroot
-- /var/lib/tomcat8/webapps/uploadbare_traversal_outside_webroot
-- /opt/tomcat7/webapps/example
-- /opt/tomcat8/webapps/example.org
-- /opt/tomcat5/webapps/uploadbare_traversal_outside_webroot
-- [...]
+---
 
-and so on. The remote webroot can depend on the platform, version, OS type, OS version as well as on internal standards within an organisation.
+## Installation
 
-Based on well-known server-specific webroot paths + target hostname + user-specified variables, psychoPATH attempts to generate a comprehensive list of all potentially valid paths to use while blindly searching for vulnerable file upload. This approach was directly inspired by the technique used in `--os-shell` mode in `sqlmap`.
+**Artifact:** `dist/PathHunter.jar`
 
+1. Open Burp Suite.
+2. Go to **Extensions** → **Installed** → **Add**.
+3. Extension type: **Java**.
+4. Select `dist/PathHunter.jar` from this repository (or your build output).
+5. Confirm the extension loads without errors.
+6. Expect:
+   - Extension name: **PathHunter**
+   - Suite tab: **PathHunter**
+   - Intruder generators: **Byte**, **Directory checker**, **Path traversal**, **Payload marker**
 
-### 2) Path traversal + upload dir inside of the webroot
+**Entry class (required by Burp):** `uk.co.pentest.psychoPATH.BurpExtender`
 
-Let's go to our next scenario then, which will be a slightly modified version of the previous example.
-The code remains the same, traversal-vulnerable. The only difference is the configured upload directory. Instead of `/tmp/`, we use `/var/lib/tomcat8/webapps/uploadbase_traversal_inside_webroot/nowaytofindme/tmp`.
+Do not load the historical `Java/psychoPATH.jar` side-by-side unless you intend to compare behaviour; prefer `dist/PathHunter.jar` for PathHunter.
 
-The `nowaytofindme/tmp` directory is not explicitly linked by the application and there is no way to guess it with a dictionary-based enumeration approach.
+Rebuild instructions: `docs/build-and-installation.md`. Load-failure background (package `burp` conflict on modern Burp): `docs/burp-loading-fix.md`.
 
-Luckily for us, the application is still vulnerable to path traversal.
-We do not even need to guess the webroot. The payload to do the trick (put the file to `/var/lib/tomcat8/webapps/uploadbase_traversal_inside_webroot`, so it can be accessed by requesting `http://example.org/uploadbase_traversal_inside_webroot/a.jpg` is simply `../../a.jpg`.
+---
 
-### 3) No path traversal + upload dir inside the webroot
+## Architecture
 
-The third example is not vulnerable to path traversal. The upload directory is located in the webroot (`logs/tmp` -> `/var/lib/tomcat8/webapps/uploadbase_traversal_inside_webroot/logs/tmp`). We already know it exists, supposedly among multiple other directories, like `javascript/`, `css/` or `images/` - but we would not normally suspect any of these could be the actual upload directory (no directory listing + the uploaded file is not explicitly linked by the application).
-
-So, the payload is simply `a.jpg`. The file (or its copy) is put under `logs/tmp/a.jpg` - but no sane person would search for the file they just uploaded in a directory/subdirectory called `logs/tmp`. psychoPATH is not a sane person.
-
-### Other possible issues with traversal-vulnerable uploads
-There might be another vulnerable, hard to discover variant of a file upload function prone to path traversal. 
-Both traversal cases described above would not get detected if there was no +w permission on the webroot (`/var/lib/tomcat8/webapps/uploadbare_traversal_outside_webroot` and `/var/lib/tomcat8/webapps/uploadbare_traversal_inside_webroot`, respectively). The only spark of hope here is that any of the subdirectories, like `images/`, has such permission enabled. This is why all the directories inside the webroot are also worth shooting at explicitly, leading to payloads like `./../../../../../../../../var/lib/tomcat8/uploadbare_traversal_inside_webroot/images/a.jpg` or `./../images/a.jpg`.
-
-### Are any of these upload scenarios even likely?
-Not very (although all met in the wild, they are just quite rare), this is why it appeared sensible to automate the entire check.
-
-Speaking of path traversal, *most* of today's frameworks and languages are path traversal-proof. Still, sometimes they are not used properly. When it comes to languages, they usually (e.g. PHP) strip any path sequences from the standard variable holding the POST-ed file (`Content-Disposition: form-data; name="file"; filename="test.jpg"`), still it is quite frequent the application is using another user-supplied variable to rename the file after upload (and this is our likely-successful injection point).
-
-When it comes to uploading files to hidden/not explicitly linked directories in the document root (those explicitly linked like `Your file is here: <a href='uploads/a.jpg'>uploads/a.jpg</a>` are trivial to find, no tools needed), it is usually a result of weird development practices and/or some forgotten 'temporary' code put together for testing - and never removed. Still, it happens and it is being missed, as, again, no sane person would think of e.g. searching for the file they just uploaded in a webroot subdirectory called `logs/tmp`.
-
-
-### Hunting uploads in the dark - the algorithm
-
-The following is a general algorithm we employ to perform blind detection of any of the cases mentioned above:
-- upload a legitimate file that is accepted by the application (a benign filename, extension, format and size) - we want to avoid false negatives due to any additional validation checks performed by the application
-- estimate the possible potentially valid webroots, including their variants with webroot-located subdirectories and path traversal payloads (both relative, like `../../a.jpg` and absolute, like `./../../../var/lib/tomcat6/webapps/servletname/a.jpg`, `./../../../var/lib/tomcat6/webapps/servletname/img/a.jpg` and so on) - this step is automated and customizable
-- attempt to upload the file using all the payloads from the step above, placing a unique string in each file we attempt to upload (this step is automated and customizable as well)
-- search for the uploaded file by attempting GETs to all known directories in the webroot, e.g. http://example.org/a.jpg, http://example.org/img/a.jpg and so on (this step is automated as well)
-- if we find the file in any of the locations, we look into its contents to identify the unique string (payload mark), so we can track down the successful payload 
-
-
-## The evasive techniques
-The evasive techniques apply both to file uploading and file reading (LFI).
-
-The basic traversal payload is `../`, or more generally `<DOT><DOT><SLASH>` (`<SLASH>` can be both the normal `/` and the Windows `\`).
-
-
-
-### Non-recursive filters
-1) removing only `../`
-2) removing only `./`
-3) removing `../` and then `./`
-4) removing `./` and then `../`
-
-
-First, let's have a look at the basic non-recursive filter scenarios:
-
-1)
-`....//....//....//....//....//....//....//....//` -> rm `../`-> `../../../../../../../../` OK
-
-2)
-`...//...//...//...//...//...//...//...//...//` -> rm `./` -> `../../../../../../../../../` OK
-
-
-3) 
-`.....///.....///.....///.....///.....///.....///.....///` -> rm `../` -> `...//...//...//...//...//...//...//` -> rm `./` -> `../../../../../../../`  OK
-
-4) 
-`.....///.....///.....///.....///.....///.....///.....///` -> rm `./` -> `....//....//....//....//....//....//....//` -> rm `../` -> `../../../../../../../` OK
-
-So, we only need three non-recurrent evasive payloads:
-
-- `....//`
-- `...//`
-- `.....///`
-
-### Breakup-filters
-By this we mean filters removing `..`, `../` or `./` BEFORE removing some other character/string - e.g. a whitespace - let's call it a breakup sequence.
-To simplify the examples, we use white space as a breakup sequence:
-
-1) `.. /` -> rm `../` -> `.. /` -> rm ` ` -> `../` OK 
-
-2) `. ./` -> rm `../` -> `. ./` -> rm ` ` -> `../` OK 
-
-3) `. ./` -> rm `..` -> `. ./` -> rm ` ` -> `../` OK
-
-4) `. . /` -> rm `./` -> `.. /` -> rm ` ` -> `../` OK
-
-5) `.. .//` -> rm `../` -> `.. .//` -> rm `./` -> `.. /` rm ` ` -> `../` OK
-
-6) `.. .//` -> rm `./` -> `.. /` -> rm `../` -> `.. /` -> rm ` ` -> `../` OK
-
-7) `. . /` -> rm `..` -> `. . /` -> rm `./` -> `. . /` -> rm ` ` -> `../` OK
-
-And finally it turns out the last breakup sequence `. . /` can defeat all the above filters at the same time.
-
-So, we should only need one breakup sequence evasive payload:
-
-- `. . /`
-
-Or, more generally, `.{BREAKUP}.{BREAKUP}/`.
-
-The breakup sequence is fully configurable, just as the list of the traversal payloads with the `{BREAKUP}` holder.
-
-The breakup sequence might be a white space (or some other white character, as these are frequently removed from the user input). It might, as well, be some 'bad' word, like 'select' or 'script', if the application is stupid enough to try to prevent input validation problems by cutting out 'dangerous' strings from the user input - and keep processing it further - which creates cross-filter interferences leading to this kind of bypasses.
-
-### Output encoding
-At the moments, all the output payloads can be encoded with use of all/any of the following encodings:
-- none (default)
-- URL-encoded
-- double URL-encoded
-
-### Future improvements
-Please see the [TODO](https://www.github.com/ewilded/psychoPATH/blob/master/TODO?raw=true)
-
-### Contribution
-Please feel free to report any evasive techniques/optimizations/features you would like to see included into this project.
+PathHunter is a single Burp entry class, a Swing configuration tab, and a shared payload engine used by Intruder, export/copy, and the optional Scanner check.
+
+```text
+Burp Suite (legacy Extender API)
+  └─ uk.co.pentest.psychoPATH.BurpExtender
+        ├─ PsychoTab / PsychoPanel2   (Suite UI)
+        ├─ PayloadFactory ×4          (Intruder)
+        │     ├─ IntruderPayloadGeneratorByte
+        │     └─ IntruderPayloadGenerator (path / check / mark)
+        ├─ DirectScannerCheck         (optional active scan)
+        └─ Menu                       (context menu → scope)
+```
+
+- **Package namespace (technical):** `uk.co.pentest.psychoPATH` — retained for compatibility; not a user-facing brand.
+- **User-facing brand:** PathHunter (extension name and tab caption).
+- **API surface:** `burp.IBurpExtender` and related legacy interfaces (not Montoya yet).
+
+Details: `docs/architecture.md`.
+
+---
+
+## Roadmap
+
+The items below are **planned**, not implemented. They mark intended independent development directions.
+
+- Advanced Path Traversal Payload Engine
+- Absolute Path Testing
+- Advanced Encoding and Traversal Variants
+- Linux and Windows Path Strategies (hardening and completeness)
+- Improved LFI detection
+- Response Analysis
+- Better Intruder integration
+- Improved user interface
+- Defect fixes listed in `docs/known-limitations.md` and `docs/development-roadmap.md`
+- Repeatable build scripting (without claiming NetBeans Ant is present)
+
+---
+
+## Development and contribution
+
+| Item | Value |
+| --- | --- |
+| Project | PathHunter |
+| Maintainer | Amir Barkhordari |
+| Repository | https://github.com/Amirbarkhordari/PathHunter |
+| License | GPL-3.0 (`LICENSE`) |
+| Status | Active development; derivative of psychoPATH |
+
+Contributions should preserve GPL-3.0, keep original copyright / `@author` notices on inherited files, and document substantial changes. Prefer discussing large API migrations (for example Montoya) before large refactors.
+
+Internal technical docs live under `docs/`:
+
+| Document | Purpose |
+| --- | --- |
+| [CHANGELOG.md](CHANGELOG.md) | Versioned change log |
+| [docs/development-history.md](docs/development-history.md) | Phase chronology |
+| [docs/project-overview.md](docs/project-overview.md) | Project identity and layout |
+| [docs/architecture.md](docs/architecture.md) | Burp integration architecture |
+| [docs/feature-inventory.md](docs/feature-inventory.md) | Verified feature status |
+| [docs/build-and-installation.md](docs/build-and-installation.md) | Build and install |
+| [docs/test-results.md](docs/test-results.md) | Automated test results |
+| [docs/identity-audit.md](docs/identity-audit.md) | Branding vs attribution audit |
+| [docs/github-fork-detachment.md](docs/github-fork-detachment.md) | Fork-network status and manual steps |
+| [docs/burp-loading-fix.md](docs/burp-loading-fix.md) | Phase 0.1 load failure analysis |
+| [docs/known-limitations.md](docs/known-limitations.md) | Known defects |
+| [docs/development-roadmap.md](docs/development-roadmap.md) | Planned work |
+
+Regression harness sources: `tools/smoke/`.
+
+---
+
+## License
+
+This project is licensed under the **GNU General Public License v3.0**. See `LICENSE`.
+
+It includes and modifies GPL-3.0-licensed material from psychoPATH by Julian Horoszkiewicz. Attribution and notice details are in `NOTICE`.

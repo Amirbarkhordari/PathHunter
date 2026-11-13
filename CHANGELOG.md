@@ -1,0 +1,54 @@
+# Changelog
+
+All notable changes to PathHunter are documented in this file.
+
+## [Unreleased]
+
+### Planned
+
+- Advanced path traversal payload engine and related roadmap items (see README)
+
+## [0.1.0] – 2026-11-13
+
+PathHunter independent identity and modern Burp Suite loading compatibility. Derivative of psychoPATH (GPL-3.0) by Julian Horoszkiewicz.
+
+### Fixed
+
+- **Burp classloader compatibility:** Implementation classes no longer live in `package burp`. Modern Burp Suite parent-first loading of `burp.*` no longer treats the extension entry class as an unrecognized type.
+- Entry point is now `uk.co.pentest.psychoPATH.BurpExtender`.
+
+### Changed
+
+- User-facing branding: extension name, suite tab, context menu, and scanner issue title use **PathHunter**.
+- Distribution artifact renamed to `dist/PathHunter.jar` (historical `Java/psychoPATH.jar` left untouched).
+- Professional README, NOTICE, and documentation under `docs/`.
+- GitHub repository description and topics updated for PathHunter.
+- Automated harness sources placed under `tools/smoke/`.
+
+### Added
+
+- `NOTICE` — derivative attribution (psychoPATH → PathHunter).
+- `docs/identity-audit.md`, `docs/github-fork-detachment.md`, `docs/development-history.md`.
+- `.gitignore` for build intermediates.
+- LoadCheck / ProveBlock / ScanLikeBurp / Smoke harnesses for regression.
+
+### GitHub / repository
+
+- Description and topics configured on `Amirbarkhordari/PathHunter`.
+- **Leave fork network:** not completed via API (`detachFork` mutation unavailable). Manual Settings → Danger Zone steps remain required. See `docs/github-fork-detachment.md`.
+
+### Test results (2026-11-13)
+
+| Check | Result |
+| --- | --- |
+| `javac --release 8` | Pass |
+| JAR integrity / entry / no bundled Burp API / major 52 | Pass |
+| LoadCheck | 11/11 |
+| ProveBlock | Pass |
+| ScanLikeBurp | 1 candidate (`uk.co.pentest.psychoPATH.BurpExtender`) |
+| Smoke | 29/29 |
+| Burp GUI load | Not run in automation |
+
+### Attribution
+
+Original project: [psychoPATH](https://github.com/ewilded/psychoPATH) by Julian Horoszkiewicz. License: GPL-3.0.

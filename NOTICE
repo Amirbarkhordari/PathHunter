@@ -1,0 +1,27 @@
+PathHunter
+==========
+
+PathHunter is an independently maintained Burp Suite extension derived from
+psychoPATH.
+
+Original work
+-------------
+  Project:  psychoPATH
+  Author:   Julian Horoszkiewicz (ewilded)
+  Source:   https://github.com/ewilded/psychoPATH
+  License:  GNU General Public License version 3 (GPL-3.0)
+
+Derivative work
+---------------
+  Project:    PathHunter
+  Maintainer: Amir Barkhordari
+  Source:     https://github.com/Amirbarkhordari/PathHunter
+  License:    GNU General Public License version 3 (GPL-3.0)
+
+Copyright notices and @author tags in inherited source files identify the
+original authors and must be preserved. PathHunter branding applies to
+user-facing names, documentation, and the distribution artifact
+dist/PathHunter.jar; Java package and class identifiers under
+uk.co.pentest.psychoPATH are technical identifiers retained for compatibility.
+
+The full license text is in the LICENSE file.
