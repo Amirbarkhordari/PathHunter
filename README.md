@@ -8,6 +8,8 @@
 
 PathHunter is a Java extension for Burp Suite that helps security testers find **file path traversal**, **local file inclusion (LFI) / arbitrary file read**, and **file-upload path** issues using configurable payload generators, encoding options, and Intruder/Scanner integration.
 
+**Maintainer:** Amir Barkhordari — https://github.com/Amirbarkhordari/PathHunter
+
 ---
 
 ## Introduction
@@ -28,24 +30,7 @@ PathHunter generates and applies path-oriented payloads inside Burp Suite so you
 - Registers Intruder payload generators (path traversal, directory checker, payload marker, byte)
 - Optionally runs an active Scanner check for common LFI indicators
 
-PathHunter is derived from the original **psychoPATH** project and is being actively maintained and enhanced for modern Burp Suite compatibility and future capability growth. Planned work is listed under [Roadmap](#roadmap); only verified behaviour is described under [Current features](#current-features).
-
----
-
-## Original project attribution
-
-PathHunter is a **derivative work** of:
-
-| Item | Value |
-| --- | --- |
-| Original project | **psychoPATH** |
-| Original author | **Julian Horoszkiewicz** (`ewilded`) |
-| Original repository | https://github.com/ewilded/psychoPATH |
-| Original license | **GPL-3.0** |
-
-The original author’s copyright and license obligations are preserved. This repository does **not** claim that the original psychoPATH codebase was authored by the current maintainer. See `LICENSE`, `NOTICE`, and source-file `@author` / copyright notices.
-
-**Current maintainer:** Amir Barkhordari — https://github.com/Amirbarkhordari/PathHunter
+PathHunter is actively maintained and enhanced for modern Burp Suite compatibility. Planned work is listed under [Roadmap](#roadmap); only verified behaviour is described under [Current features](#current-features).
 
 ---
 
@@ -69,7 +54,7 @@ The following are present in the current sources and have been exercised by the 
 | Payload marker | Implemented | Fixed-width index for correlating uploads |
 | Payload export / clipboard | Implemented | Save/copy from the UI |
 | Context menu → scope update | Partial | Host propagation works; label/site-map edge cases documented |
-| Modern Burp load (non-`burp` package entry) | Implemented | Entry: `uk.co.pentest.psychoPATH.BurpExtender`; display name **PathHunter** |
+| Modern Burp load (non-`burp` package entry) | Implemented | Entry class under the project package; display name **PathHunter** |
 
 For limitations and defects already identified, see `docs/known-limitations.md`.
 
@@ -91,9 +76,7 @@ For limitations and defects already identified, see `docs/known-limitations.md`.
 
 **Entry class (required by Burp):** `uk.co.pentest.psychoPATH.BurpExtender`
 
-Do not load the historical `Java/psychoPATH.jar` side-by-side unless you intend to compare behaviour; prefer `dist/PathHunter.jar` for PathHunter.
-
-Rebuild instructions: `docs/build-and-installation.md`. Load-failure background (package `burp` conflict on modern Burp): `docs/burp-loading-fix.md`.
+Prefer `dist/PathHunter.jar` for installation. Rebuild instructions: `docs/build-and-installation.md`. Load-failure background: `docs/burp-loading-fix.md`.
 
 ---
 
@@ -103,26 +86,24 @@ PathHunter is a single Burp entry class, a Swing configuration tab, and a shared
 
 ```text
 Burp Suite (legacy Extender API)
-  └─ uk.co.pentest.psychoPATH.BurpExtender
-        ├─ PsychoTab / PsychoPanel2   (Suite UI)
+  └─ BurpExtender (project package)
+        ├─ Suite tab / configuration panel
         ├─ PayloadFactory ×4          (Intruder)
-        │     ├─ IntruderPayloadGeneratorByte
-        │     └─ IntruderPayloadGenerator (path / check / mark)
+        │     ├─ byte generator
+        │     └─ path / check / mark generators
         ├─ DirectScannerCheck         (optional active scan)
         └─ Menu                       (context menu → scope)
 ```
 
-- **Package namespace (technical):** `uk.co.pentest.psychoPATH` — retained for compatibility; not a user-facing brand.
 - **User-facing brand:** PathHunter (extension name and tab caption).
 - **API surface:** `burp.IBurpExtender` and related legacy interfaces (not Montoya yet).
-
-Details: `docs/architecture.md`.
+- Technical Java package and class names are retained for compatibility; see `docs/architecture.md`.
 
 ---
 
 ## Roadmap
 
-The items below are **planned**, not implemented. They mark intended independent development directions.
+The items below are **planned**, not implemented.
 
 - Advanced Path Traversal Payload Engine
 - Absolute Path Testing
@@ -145,11 +126,9 @@ The items below are **planned**, not implemented. They mark intended independent
 | Maintainer | Amir Barkhordari |
 | Repository | https://github.com/Amirbarkhordari/PathHunter |
 | License | GPL-3.0 (`LICENSE`) |
-| Status | Active development; derivative of psychoPATH |
+| Status | Active development |
 
-Contributions should preserve GPL-3.0, keep original copyright / `@author` notices on inherited files, and document substantial changes. Prefer discussing large API migrations (for example Montoya) before large refactors.
-
-Internal technical docs live under `docs/`:
+Contributions should preserve GPL-3.0, keep copyright / `@author` notices on inherited files, and document substantial changes. Prefer discussing large API migrations (for example Montoya) before large refactors.
 
 | Document | Purpose |
 | --- | --- |
@@ -161,7 +140,7 @@ Internal technical docs live under `docs/`:
 | [docs/build-and-installation.md](docs/build-and-installation.md) | Build and install |
 | [docs/test-results.md](docs/test-results.md) | Automated test results |
 | [docs/identity-audit.md](docs/identity-audit.md) | Branding vs attribution audit |
-| [docs/github-fork-detachment.md](docs/github-fork-detachment.md) | Fork-network status and manual steps |
+| [docs/github-fork-detachment.md](docs/github-fork-detachment.md) | Fork-network status |
 | [docs/burp-loading-fix.md](docs/burp-loading-fix.md) | Phase 0.1 load failure analysis |
 | [docs/known-limitations.md](docs/known-limitations.md) | Known defects |
 | [docs/development-roadmap.md](docs/development-roadmap.md) | Planned work |
@@ -170,8 +149,8 @@ Regression harness sources: `tools/smoke/`.
 
 ---
 
-## License
+## License and Legal Information
 
-This project is licensed under the **GNU General Public License v3.0**. See `LICENSE`.
+PathHunter is licensed under the **GNU General Public License v3.0**. See [`LICENSE`](LICENSE).
 
-It includes and modifies GPL-3.0-licensed material from psychoPATH by Julian Horoszkiewicz. Attribution and notice details are in `NOTICE`.
+This repository contains modified GPL-3.0-licensed material. It does **not** claim that all historical source was authored by the current maintainer. Required provenance, copyright, and attribution details are recorded in [`NOTICE`](NOTICE) and in applicable source-file headers / `@author` tags. Those legal notices must be preserved.

@@ -8,6 +8,18 @@ All notable changes to PathHunter are documented in this file.
 
 - Advanced path traversal payload engine and related roadmap items (see README)
 
+## [0.1.1] – 2026-11-13
+
+### Changed
+
+- **Phase 1.2 branding presentation:** README focuses on PathHunter; replaced the prominent original-project attribution section with concise **License and Legal Information**.
+- Softened GitHub repository description and `BappDescription.html` so marketing text does not advertise the prior project name.
+- Legal provenance remains in `NOTICE`, `LICENSE`, and inherited source headers (unchanged obligations).
+
+### Fixed / verified
+
+- Confirmed GitHub repository is standalone (`fork: false`) after Leave fork network.
+
 ## [0.1.0] – 2026-11-13
 
 PathHunter independent identity and modern Burp Suite loading compatibility. Derivative of psychoPATH (GPL-3.0) by Julian Horoszkiewicz.

@@ -10,7 +10,7 @@ The Burp API jar is not in the repository. Maven Central `burp-extender-api` 2.3
 
 All extension **implementation** classes live in `package uk.co.pentest.psychoPATH` under `Java/src/uk/co/pentest/`. They import allowlisted `burp.*` **API interfaces** from Burp at runtime. No project class remains in `package burp`. See `docs/burp-loading-fix.md`.
 
-The package name `psychoPATH` is a **technical identifier** retained from the original project. The user-facing product name is **PathHunter**.
+The Java package name under `uk.co.pentest.*` is a **technical identifier** retained for compatibility. The user-facing product name is **PathHunter**.
 
 ## Build commands
 
@@ -40,15 +40,13 @@ Compile exit code 0. Notes only: deprecated API and unchecked operations.
 | Bundled Burp API classes | None |
 | Extension display name | PathHunter |
 | Suite tab | PathHunter |
-| Original author jar (unchanged) | `Java/psychoPATH.jar` |
-
-Do not treat `Java/psychoPATH.jar` as the PathHunter distribution artifact.
+| Historical jar (unchanged) | `Java/psychoPATH.jar` (filename on disk; not the PathHunter distribution artifact) |
 
 ## Install in Burp Suite
 
 1. Burp → **Extensions** → **Add** → type **Java**.
 2. Select `D:\Projects\PathHunter\dist\PathHunter.jar` (or your rebuilt copy).
-3. Prefer not to load a second historical psychoPATH / BApp copy unless comparing behaviour.
+3. Prefer a single PathHunter load; avoid loading a second historical jar unless comparing behaviour.
 4. Expect extension name **PathHunter**, tab **PathHunter**, and Intruder generators Byte / Directory checker / Path traversal / Payload marker.
 5. Read the extension Output and Errors tabs.
 

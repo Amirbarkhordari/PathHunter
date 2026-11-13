@@ -1,6 +1,6 @@
 # PathHunter development history
 
-Chronological record of PathHunter’s transition from a psychoPATH fork to an independently identified project. Dates use the local Phase work calendar.
+Chronological record of PathHunter’s establishment as an independently identified project. Dates use the local Phase work calendar.
 
 ## Phase 0 — Initial audit (2026-11-13)
 
@@ -32,12 +32,20 @@ Chronological record of PathHunter’s transition from a psychoPATH fork to an i
 ## Phase 1.1 — GitHub repository finalization (2026-11-13)
 
 - Updated GitHub repository **description** and **topics** via authenticated REST API.
-- Attempted GraphQL `detachFork`: **field does not exist** on `Mutation` for this API. Official Leave fork network remains a **manual Settings UI** operation.
+- Attempted GraphQL `detachFork`: **field does not exist** on `Mutation` for this API. Leave fork network was completed later by the owner via the Settings UI.
 - Clean rebuild; LoadCheck 11/11, ProveBlock Pass, ScanLikeBurp 1 candidate, Smoke 29/29.
 - Added CHANGELOG, development history, `.gitignore`, `tools/smoke/` harness sources.
 - Committed Phase 0–1.1 work and pushed to `origin` (`https://github.com/Amirbarkhordari/PathHunter.git`).
-- Upstream remote `https://github.com/ewilded/psychoPATH.git` retained locally.
+- Upstream remote retained locally for historical fetch.
+
+## Phase 1.2 — Independent branding presentation (2026-11-13)
+
+- README presents PathHunter as the primary public identity; replaced prominent original-project attribution block with concise **License and Legal Information**.
+- Softened GitHub description and `BappDescription.html` marketing text; legal provenance remains in `NOTICE`.
+- Verified GitHub `fork: false` (standalone repository).
+- Updated identity audit, project overview, changelog, and development history.
+- No Java package/class renames; no license change.
 
 ## License continuity
 
-Throughout all phases: GPL-3.0 (`LICENSE`), original authorship attribution preserved, `NOTICE` records the derivative relationship.
+Throughout all phases: GPL-3.0 (`LICENSE`), original authorship attribution preserved in `NOTICE` and inherited source headers. Public marketing text does not replace those legal obligations.

@@ -1,68 +1,75 @@
-# PathHunter identity audit (Phase 1)
+# PathHunter identity audit
 
-Classification of references to psychoPATH / original authorship found in the tree (excluding `build/` class outputs). Do **not** blindly rename every `psychoPATH` string.
+Phase 1 classified branding vs attribution. **Phase 1.2** updates public presentation so PathHunter is the primary brand, while GPL-required provenance remains in `NOTICE` and source headers.
 
 ## Classification legend
 
-1. **Branding** — should present as PathHunter (user-facing names, docs titles, JAR name, GitHub description).
-2. **Historical attribution** — must remain (author names, original repo URLs in attribution sections, derivative acknowledgements).
-3. **License / copyright** — must remain unchanged unless a later approved license change occurs (`LICENSE`, FSF header text, inherited copyright/`@author` lines).
-4. **Technical identifiers** — do not rename in Phase 1 without a compatibility plan (Java packages, class names, Intruder factory keys, prebuilt `Java/psychoPATH.jar`).
+1. **User-facing branding** — must present as PathHunter.
+2. **Historical documentation** — may name the prior project for chronology / technical history.
+3. **Copyright and license attribution** — must remain (`LICENSE`, `NOTICE`, `@author`, copyright headers).
+4. **Technical package/class identifiers** — do not rename without a compatibility plan.
+5. **Original binary or historical artifacts** — leave file paths/names as stored on disk.
 
 ---
 
-## Branding → PathHunter
+## Phase 1.2 user-facing updates
 
-| Location | Finding | Phase 1 action |
-| --- | --- | --- |
-| `README.md` | Entire document was psychoPATH-branded | Replaced with PathHunter README + attribution section |
-| Extension display name | Was `psychoPATH Extension`; now `PathHunter` in `BurpExtender` | Keep PathHunter |
-| Suite tab caption | Was `psychoPATH`; now `PathHunter` in `PsychoTab` | Keep PathHunter |
-| Context menu item | Was `Propagate to psychoPATH`; now `Propagate to PathHunter` | Keep PathHunter |
-| Scanner issue name | Was `Arbitrary file read (psychoPATH)`; now `(PathHunter)` | Keep PathHunter |
-| Distribution JAR | `dist/PathHunter.jar` | Canonical artifact name |
-| Docs under `docs/` | Mixed Phase 0 text still said psychoPATH as program name | Updated to PathHunter with attribution |
-| GitHub repository description | Still psychoPATH marketing text via fork inherit | **Manual** Settings update (not done automatically) |
-| `BappDescription.html` | Points only at ewilded/psychoPATH | Left as historical App Store text; update when republishing under PathHunter |
-
-## Historical attribution → keep
-
-| Location | Finding |
+| Location | Change |
 | --- | --- |
-| `NOTICE` | Explicit psychoPATH → PathHunter derivative statement |
-| `README.md` attribution section | Julian Horoszkiewicz, ewilded/psychoPATH, GPL-3.0 |
-| Git `@author` / historical README authorship | ewilded / julian |
-| PDFs / screenshots / logo | Original project materials; keep |
-| `docs/*` historical notes | Technical history of the fork and Phase 0/0.1 work |
+| `README.md` | Removed prominent “Original project attribution” section; replaced with concise **License and Legal Information**; intro no longer advertises the prior project name |
+| GitHub description | PathHunter-focused; removed “Derived from …” marketing phrasing |
+| `BappDescription.html` | PathHunter product description; legal pointer to `NOTICE` / `LICENSE` without marketing the prior name |
+| Extension / tab / menu / issue title | Already PathHunter (Phase 0.1 / 1) |
+| `docs/project-overview.md` | PathHunter-first identity table; legal detail deferred to `NOTICE` |
 
-## License / copyright → unchanged
+---
 
-| Location | Finding |
+## Remaining occurrences (why they stay)
+
+### Copyright and license attribution (keep)
+
+| Location | Why |
 | --- | --- |
-| `LICENSE` | Full GPL-3.0 text preserved |
-| GitHub `license.spdx_id` | `GPL-3.0` |
-| Source `@author ewilded` / `@author julian` | Preserved on inherited files |
-| No wholesale author rewrite | PathHunter maintainer named only in README / NOTICE / docs |
+| `LICENSE` | Full GPL-3.0 text |
+| `NOTICE` | Required derivative provenance (names prior project, Julian Horoszkiewicz / ewilded, URLs) |
+| `README.md` → License and Legal Information | Points to `NOTICE` without false authorship claims |
+| Java `@author ewilded` / `@author julian` | Inherited source attribution |
+| File header comments in inherited sources | Historical / author comments |
 
-## Technical identifiers → do not rename (Phase 1)
+### Technical package/class identifiers (keep)
 
-| Identifier | Why keep |
+| Identifier | Why |
 | --- | --- |
-| Package `uk.co.pentest.psychoPATH` | Load entry, class files, Intruder registration; rename is a broad refactor |
-| Classes `PsychoPATH`, `PsychoTab`, `PsychoPanel2`, `PsychoPATHScanner*`, etc. | Internal API; high risk / no user benefit in Phase 1 |
-| Intruder factory type keys `byte` / `check` / `path` / `mark` | Behaviour contract |
-| `Java/psychoPATH.jar` | Original author binary kept untouched |
-| `Java/build.xml` project name | NetBeans leftover; unused for current javac build |
-| Source paths under `Java/src/uk/co/pentest/` | Physical layout; packages remain psychoPATH |
+| Package `uk.co.pentest.psychoPATH` | Load entry and class files |
+| Classes `PsychoPATH`, `PsychoTab`, `PsychoPanel2`, `PsychoPATHScanner*`, `psychoPayload`, fields like `psychoPATHs` | Internal API; renaming is a broad refactor |
+| Intruder factory keys `byte` / `check` / `path` / `mark` | Behaviour contract |
+| Entry string in install docs: `uk.co.pentest.psychoPATH.BurpExtender` | Required Burp entry class name |
+| `tools/smoke/*` references to those FQCNs | Harness must match runtime types |
 
-## Old URLs
+### Original binary / historical artifacts (keep)
 
-| URL | Classification |
+| Path | Why |
 | --- | --- |
-| https://github.com/ewilded/psychoPATH | Attribution / upstream remote — keep |
-| https://github.com/Amirbarkhordari/PathHunter | Current project — primary |
-| App Store / Bapp link to ewilded | Historical until BApp republish |
+| `Java/psychoPATH.jar` | Untouched historical author binary; filename is the artifact name on disk |
+| PDFs, screenshots, `TODO`, `perl/` | Original project materials |
 
-## Summary decision
+### Historical documentation (keep; not marketing)
 
-PathHunter is the **user-facing and documentation identity**. psychoPATH remains in **legal attribution**, **history**, and **Java technical namespaces**. GPL-3.0 and original authorship are not replaced.
+| Location | Why |
+| --- | --- |
+| `docs/development-history.md`, `docs/burp-loading-fix.md`, `docs/github-fork-detachment.md`, `CHANGELOG.md` | Accurate chronology of fork → PathHunter |
+| `docs/architecture.md`, `docs/build-and-installation.md`, `docs/feature-inventory.md`, etc. | Technical docs that must name packages/classes and prior phases |
+
+### Remote
+
+| Item | Status |
+| --- | --- |
+| GitHub topics | PathHunter-relevant only (no prior-project topic) |
+| GitHub description | PathHunter capabilities (Phase 1.2) |
+| Fork network | Detached as of Phase 1.2 verification (`fork: false`) |
+
+---
+
+## Summary
+
+**Public brand:** PathHunter. **Legal provenance:** `NOTICE` + headers. **Technical names:** unchanged.
