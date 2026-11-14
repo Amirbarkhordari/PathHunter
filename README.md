@@ -48,6 +48,7 @@ The following are present in the current sources and have been exercised by the 
 | File Upload Request Analyzer | Implemented | Passive multipart/binary analysis, signatures, File Upload tab, context-menu handoff (no active uploads) |
 | Filename & Extension Testing | Implemented | Filename analysis, extension strategies, structured test plans (`NOT_EXECUTED`); no HTTP execution |
 | MIME Validation Testing | Implemented | MIME parse/compare vs extension & signature; MIME test plans (`NOT_EXECUTED`); no HTTP execution |
+| File Content Validation | Implemented | Bounded PNG/JPEG/GIF/PDF structure, SHA-256, content test plans (`NOT_EXECUTED`); no HTTP execution |
 | File-upload path scenarios | Payload only | Intruder-driven; covers in-root / out-of-root / no-traversal discovery patterns |
 | Document-root lists (nix / Windows / app servers) | Implemented | Built-in lists; `{TARGET}` substitution (with known edge cases) |
 | Directory checker | Partial | Driven from site-map–derived suffixes; UI list wiring has known gaps |
@@ -112,8 +113,8 @@ Burp Suite (legacy Extender API)
 
 The items below are **planned**, not implemented.
 
-- Phase 4.4 – File Content Validation Engine
-- Managed File Upload Testing (executor / response analysis / evidence)
+- Phase 4.5 – Managed File Upload Test Executor
+- Response analysis / evidence / reporting for upload tests
 - Advanced Path Traversal Payload Engine (further variants beyond absolute paths)
 - Advanced Encoding and Traversal Variants
 - Linux and Windows Path Strategies (hardening and completeness)
@@ -157,8 +158,9 @@ Contributions should preserve GPL-3.0, keep copyright / `@author` notices on inh
 | [docs/phases/phase-4.1-file-upload-request-analyzer.md](docs/phases/phase-4.1-file-upload-request-analyzer.md) | File Upload Request Analyzer (Phase 4.1) |
 | [docs/phases/phase-4.2-filename-extension-testing-engine.md](docs/phases/phase-4.2-filename-extension-testing-engine.md) | Filename & Extension Testing (Phase 4.2) |
 | [docs/phases/phase-4.3-mime-validation-testing-engine.md](docs/phases/phase-4.3-mime-validation-testing-engine.md) | MIME Validation Testing (Phase 4.3) |
+| [docs/phases/phase-4.4-file-content-validation-engine.md](docs/phases/phase-4.4-file-content-validation-engine.md) | File Content Validation (Phase 4.4) |
 
-Regression harness sources: `tools/smoke/` (`Smoke`, `AbsolutePathSmoke`, `UrlEncodingSmoke`, `FileUploadAnalyzerSmoke`, `FilenameTestingSmoke`, `MimeValidationSmoke`, LoadCheck, ProveBlock, ScanLikeBurp).
+Regression harness sources: `tools/smoke/` (`Smoke`, `AbsolutePathSmoke`, `UrlEncodingSmoke`, `FileUploadAnalyzerSmoke`, `FilenameTestingSmoke`, `MimeValidationSmoke`, `FileContentValidationSmoke`, LoadCheck, ProveBlock, ScanLikeBurp).
 
 ---
 

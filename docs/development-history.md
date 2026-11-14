@@ -87,6 +87,15 @@ Chronological record of PathHunter’s establishment as an independently identif
 - PortSwigger Content-Type lab and Burp GUI: NOT RUN.
 - Details: `docs/phases/phase-4.3-mime-validation-testing-engine.md`.
 
+## Phase 4.4 — File Content Validation Engine (2026-11-14)
+
+- Added content hashing, bounded PNG/JPEG/GIF/PDF structure validation, consistency analysis, and controlled content candidate generation.
+- Extended test cases with `CATEGORY_CONTENT` / `TARGET_PART_CONTENT_BYTES`; original bytes remain immutable.
+- File Upload → Content Testing GUI; Phases 4.1–4.3 behaviour preserved.
+- FileContentValidationSmoke 91/91 (+2 SKIP); full regression suite passed.
+- PortSwigger file-upload labs and Burp GUI: NOT RUN.
+- Details: `docs/phases/phase-4.4-file-content-validation-engine.md`.
+
 ## License continuity
 
 Throughout all phases: GPL-3.0 (`LICENSE`), original authorship attribution preserved in `NOTICE` and inherited source headers. Public marketing text does not replace those legal obligations.

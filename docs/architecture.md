@@ -141,7 +141,7 @@ All extension **implementation** sources live under `Java/src/uk/co/pentest/` wi
 
 ### File Upload module (Phase 4.1)
 
-Passive analysis lives in `package uk.co.pentest.psychoPATH.fileupload` under `Java/src/uk/co/pentest/fileupload/`. `Menu` hands selected request bytes to `PsychoPanel2.sendToFileUploadAnalyzer` → `FileUploadPanel` → `FileUploadRequestAnalyzer`. Phase 4.2 adds `FilenameTestingEngine`; Phase 4.3 adds `MimeValidationEngine` for MIME/extension/signature comparison and MIME plans (`NOT_EXECUTED`, `TARGET_PART_CONTENT_TYPE`). Path Traversal engines are unchanged. Active managed upload execution is deferred; see phase docs under `docs/phases/`.
+Passive analysis lives in `package uk.co.pentest.psychoPATH.fileupload` under `Java/src/uk/co/pentest/fileupload/`. `Menu` hands selected request bytes to `PsychoPanel2.sendToFileUploadAnalyzer` → `FileUploadPanel` → `FileUploadRequestAnalyzer`. Phase 4.2 adds `FilenameTestingEngine`; Phase 4.3 adds `MimeValidationEngine` for MIME/extension/signature comparison and MIME plans (`NOT_EXECUTED`, `TARGET_PART_CONTENT_TYPE`). Phase 4.4 adds `FileContentValidationEngine` for bounded content structure checks, SHA-256, and content plans (`NOT_EXECUTED`, `TARGET_PART_CONTENT_BYTES`) without mutating original part bytes. Path Traversal engines are unchanged. Active managed upload execution is deferred (Phase 4.5+); see phase docs under `docs/phases/`.
 
 ## Error handling
 

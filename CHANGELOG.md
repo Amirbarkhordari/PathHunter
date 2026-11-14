@@ -6,8 +6,41 @@ All notable changes to PathHunter are documented in this file.
 
 ### Planned
 
-- Phase 4.4 – File Content Validation Engine (not started)
+- Phase 4.5 – Managed File Upload Test Executor (not started)
 - Further path-traversal engine enhancements (see README roadmap)
+
+## [0.7.0] – 2026-11-14
+
+### Added
+
+- **File Content Validation Engine** (`FileContentValidationEngine`, `FileContentAnalyzer`, `FileStructureValidator`, `FileContentHasher`, `ContentVariantGenerator`).
+- Bounded PNG / JPEG / GIF / PDF structural checks; SHA-256 integrity; metadata consistency.
+- Controlled in-memory content candidates (truncate / marker / signature / length / malformed metadata) with dedupe and resource limits.
+- Extended `UploadTestCase` / `UploadTestPlan` with `CATEGORY_CONTENT`, `TARGET_PART_CONTENT_BYTES`, content hashes/lengths, `FileContentAnalysisResult`.
+- File Upload → **Content Testing** GUI sub-tab (no Execute).
+- `tools/smoke/FileContentValidationSmoke.java` (91 pass / 2 skipped).
+- Phase write-up: `docs/phases/phase-4.4-file-content-validation-engine.md`.
+
+### Not in this release
+
+- Managed HTTP execution, automatic uploads, webshell/polyglot generation, full format decode, response-based verification.
+
+### Tests
+
+| Check | Result |
+| --- | --- |
+| FileContentValidationSmoke | 91/91 (+2 SKIP) |
+| MimeValidationSmoke | 78/78 (+2 SKIP) |
+| FilenameTestingSmoke | 80/80 (+2 SKIP) |
+| FileUploadAnalyzerSmoke | 80/80 (+2 SKIP) |
+| UrlEncodingSmoke | 31/31 |
+| AbsolutePathSmoke | 33/33 |
+| Smoke | 29/29 |
+| LoadCheck | 11/11 |
+| ProveBlock | Pass |
+| ScanLikeBurp | 1 candidate |
+
+PortSwigger file-upload labs: documented manual procedure only; not executed here.
 
 ## [0.6.0] – 2026-11-14
 

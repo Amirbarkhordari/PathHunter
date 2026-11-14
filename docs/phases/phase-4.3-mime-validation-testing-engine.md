@@ -58,6 +58,6 @@ File Upload → **MIME Testing**: selected part, MIME analysis, comparison, stra
 
 **NOT RUN.** Manual: Content-Type restriction bypass lab → analyze → MIME Testing → generate plan → compare candidates in Repeater. Do not claim solved from generation alone.
 
-## Not implemented
+## Not implemented (at Phase 4.3 close)
 
-HTTP execution, content validation, polyglots, response verification, Phase 4.4+.
+HTTP execution, content validation, polyglots, response verification. Content validation was delivered later as Phase 4.4.
