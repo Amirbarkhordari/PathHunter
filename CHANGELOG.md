@@ -6,8 +6,40 @@ All notable changes to PathHunter are documented in this file.
 
 ### Planned
 
-- Phase 4.3 – MIME Validation Testing Engine (not started)
+- Phase 4.4 – File Content Validation Engine (not started)
 - Further path-traversal engine enhancements (see README roadmap)
+
+## [0.6.0] – 2026-11-14
+
+### Added
+
+- **MIME Validation Testing Engine** (`MimeValidationEngine`, `MimeAnalyzer`, `MimeExtensionMapper`, `MimeSignatureComparator`, `MimeVariantGenerator`).
+- MIME parse/normalize with raw preservation; extension↔MIME mapping; signature comparison statuses.
+- Strategies: declared/case/parameter/missing-empty/mismatch/custom MIME candidates.
+- Extended `UploadTestCase` with `CATEGORY_MIME`, `TARGET_PART_CONTENT_TYPE`, MIME fields.
+- File Upload → **MIME Testing** GUI sub-tab (no Execute).
+- `tools/smoke/MimeValidationSmoke.java` (78 pass / 2 skipped).
+- Phase write-up: `docs/phases/phase-4.3-mime-validation-testing-engine.md`.
+
+### Not in this release
+
+- Managed HTTP execution, file content validation, polyglots, response-based verification.
+
+### Tests
+
+| Check | Result |
+| --- | --- |
+| MimeValidationSmoke | 78/78 (+2 SKIP) |
+| FilenameTestingSmoke | 80/80 (+2 SKIP) |
+| FileUploadAnalyzerSmoke | 80/80 (+2 SKIP) |
+| UrlEncodingSmoke | 31/31 |
+| AbsolutePathSmoke | 33/33 |
+| Smoke | 29/29 |
+| LoadCheck | 11/11 |
+| ProveBlock | Pass |
+| ScanLikeBurp | 1 candidate |
+
+PortSwigger Content-Type lab: documented manual procedure only; not executed here.
 
 ## [0.5.0] – 2026-11-14
 

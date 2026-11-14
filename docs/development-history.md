@@ -78,6 +78,15 @@ Chronological record of PathHunter’s establishment as an independently identif
 - PortSwigger labs and Burp GUI: NOT RUN.
 - Details: `docs/phases/phase-4.2-filename-extension-testing-engine.md`.
 
+## Phase 4.3 — MIME Validation Testing Engine (2026-11-14)
+
+- Added MIME parse/mapper/signature comparison/variant generation and `MimeValidationEngine`.
+- Extended test cases with MIME category and `PART_CONTENT_TYPE` target property.
+- File Upload → MIME Testing GUI; Filename Testing and Analyzer unchanged in behaviour.
+- MimeValidationSmoke 78/78 (+2 SKIP); full regression suite passed.
+- PortSwigger Content-Type lab and Burp GUI: NOT RUN.
+- Details: `docs/phases/phase-4.3-mime-validation-testing-engine.md`.
+
 ## License continuity
 
 Throughout all phases: GPL-3.0 (`LICENSE`), original authorship attribution preserved in `NOTICE` and inherited source headers. Public marketing text does not replace those legal obligations.
