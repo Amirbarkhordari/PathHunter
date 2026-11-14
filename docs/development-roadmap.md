@@ -19,12 +19,15 @@ PathHunter is GPL-3.0. Later changes must keep that license, original copyright 
 | 4.2 | Filename & Extension Testing Engine | Complete (planning only; Burp GUI / Academy labs NOT RUN) |
 | 4.3 | MIME Validation Testing Engine | Complete (planning only; Burp GUI / Academy labs NOT RUN) |
 | 4.4 | File Content Validation Engine | Complete (planning only; Burp GUI / Academy labs NOT RUN) |
+| 4.5.1 | Managed Execution Architecture & Multipart Request Builder | Complete (prepare only; no HTTP; Burp GUI NOT RUN) |
 
 ## Planned product directions (not implemented)
 
 Clearly marked as future work in the README:
 
-- Phase 4.5 – Managed File Upload Test Executor
+- Phase 4.5.2 – Controlled HTTP Execution Engine
+- Phase 4.5.3 – Response Analysis Engine
+- Phase 4.5.4 – Evidence Collection & Test Results
 - Response analysis / evidence / reporting for upload tests
 - Advanced Path Traversal Payload Engine (further techniques beyond absolute paths)
 - Advanced Encoding and Traversal Variants

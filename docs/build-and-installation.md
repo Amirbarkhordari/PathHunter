@@ -21,12 +21,13 @@ javac --release 8 -encoding UTF-8 -Xlint:-options ^
   -cp C:\Users\Amir\Documents\Burp.Suite.Professional.2026.4.3\burpsuite_desktop_v2026.4.3.jar ^
   -d build\classes ^
   Java\src\uk\co\pentest\*.java ^
-  Java\src\uk\co\pentest\fileupload\*.java
+  Java\src\uk\co\pentest\fileupload\*.java ^
+  Java\src\uk\co\pentest\fileupload\execution\*.java
 
 jar --create --file dist\PathHunter.jar --manifest build\MANIFEST.MF -C build\classes .
 ```
 
-Phase 4.1 added the `fileupload` subpackage; both globs are required.
+Phase 4.1 added `fileupload`; Phase 4.5.1 added `fileupload/execution`. Include all three globs.
 
 Compile exit code 0. Notes only: deprecated API and unchecked operations.
 

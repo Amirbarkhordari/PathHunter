@@ -6,8 +6,39 @@ All notable changes to PathHunter are documented in this file.
 
 ### Planned
 
-- Phase 4.5 – Managed File Upload Test Executor (not started)
+- Phase 4.5.2 – Controlled HTTP Execution Engine (not started)
 - Further path-traversal engine enhancements (see README roadmap)
+
+## [0.8.0] – 2026-11-14
+
+### Added
+
+- **Managed execution architecture** (`fileupload.execution`): lifecycle, validation, batch preparation, authorization policy (disabled by default).
+- **MultipartRequestBuilder** with isolated filename / MIME / content mutations; original request preservation; SHA-256 integrity; request diff.
+- Sensitive header redaction for previews (Cookie / Authorization / CSRF).
+- File Upload → **Managed Testing** GUI (prepare/validate/preview only; no Execute / no HTTP).
+- `tools/smoke/ManagedRequestBuilderSmoke.java` (73 pass / 2 skipped).
+- Phase write-up: `docs/phases/phase-4.5.1-managed-execution-architecture.md`.
+
+### Not in this release
+
+- HTTP request transmission, uploads, response analysis, evidence reporting.
+
+### Tests
+
+| Check | Result |
+| --- | --- |
+| ManagedRequestBuilderSmoke | 73/73 (+2 SKIP) |
+| FileContentValidationSmoke | 91/91 (+2 SKIP) |
+| MimeValidationSmoke | 78/78 (+2 SKIP) |
+| FilenameTestingSmoke | 80/80 (+2 SKIP) |
+| FileUploadAnalyzerSmoke | 80/80 (+2 SKIP) |
+| UrlEncodingSmoke | 31/31 |
+| AbsolutePathSmoke | 33/33 |
+| Smoke | 29/29 |
+| LoadCheck | 11/11 |
+| ProveBlock | Pass |
+| ScanLikeBurp | 1 candidate |
 
 ## [0.7.0] – 2026-11-14
 

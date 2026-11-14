@@ -70,6 +70,6 @@ File Upload → **Content Testing**: selected part metadata (length, SHA-256), s
 
 **NOT RUN.** Manual: capture upload → PathHunter File Upload → Content Testing → analyze structure/hash → generate candidates → review hashes/lengths in plan → optional Repeater only in authorized Academy labs. Do not claim a lab solved from candidate generation alone. Do not upload webshells or polyglots from this engine.
 
-## Not implemented
+## Not implemented (at Phase 4.4 close)
 
-HTTP execution, automatic uploads, content execution, webshell/polyglot generation, archive extraction, full image/PDF decode, response-based verification, Phase 4.5 Managed Test Executor.
+HTTP execution, automatic uploads, content execution, webshell/polyglot generation, archive extraction, full image/PDF decode, response-based verification. Managed request preparation was delivered later as Phase 4.5.1 (still no HTTP send).

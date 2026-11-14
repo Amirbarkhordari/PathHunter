@@ -2,11 +2,39 @@
 
 No JUnit suite exists in the repository. PHP and Perl are not installed, so fixtures under `test_cases/` and `perl/` were not executed. No request was sent to an external host. Burp GUI Extender load was **not** opened in automation.
 
-Harness sources: `tools/smoke/` (`LoadCheck`, `ProveBlock`, `ScanLikeBurp`, `Smoke`, `AbsolutePathSmoke`, `UrlEncodingSmoke`, `FileUploadAnalyzerSmoke`, `FilenameTestingSmoke`, `MimeValidationSmoke`, `FileContentValidationSmoke`).
+Harness sources: `tools/smoke/` (`LoadCheck`, `ProveBlock`, `ScanLikeBurp`, `Smoke`, `AbsolutePathSmoke`, `UrlEncodingSmoke`, `FileUploadAnalyzerSmoke`, `FilenameTestingSmoke`, `MimeValidationSmoke`, `FileContentValidationSmoke`, `ManagedRequestBuilderSmoke`).
 
 ---
 
-## Phase 4.4 — 2026-11-14 (authoritative for current tree)
+## Phase 4.5.1 — 2026-11-14 (authoritative for current tree)
+
+**Artifact:** `dist/PathHunter.jar` (335750 bytes after clean rebuild)
+
+| Check | Expected | Actual | Status |
+| --- | --- | --- | --- |
+| Compilation `--release 8` | Exit 0 | Exit 0 | Pass |
+| JAR contains `ManagedExecutionManager` | Present | Present | Pass |
+| No bundled `burp/` API classes | 0 | 0 | Pass |
+| Bytecode major version | 52 | 52 | Pass |
+| ManagedRequestBuilderSmoke | 73 pass / 0 fail | **73/73** (+2 SKIP) | Pass |
+| FileContentValidationSmoke | 91/91 | **91/91** (+2 SKIP) | Pass |
+| MimeValidationSmoke | 78/78 | **78/78** (+2 SKIP) | Pass |
+| FilenameTestingSmoke | 80/80 | **80/80** (+2 SKIP) | Pass |
+| FileUploadAnalyzerSmoke | 80/80 | **80/80** (+2 SKIP) | Pass |
+| UrlEncodingSmoke | 31/31 | **31/31** | Pass |
+| AbsolutePathSmoke | 33/33 | **33/33** | Pass |
+| Smoke | 29/29 | **29/29** | Pass |
+| LoadCheck | 11/11 | **11/11** | Pass |
+| ProveBlock | Pass | Pass | Pass |
+| ScanLikeBurp | 1 candidate | 1 candidate | Pass |
+| Burp GUI Managed Testing | Manual | Not run | NOT RUN |
+| HTTP transmission | None | None | Pass (no client) |
+
+Evidence: `build/managedrequestbuilder-results.txt`.
+
+---
+
+## Phase 4.4 — 2026-11-14 (historical)
 
 **Artifact:** `dist/PathHunter.jar` (278623 bytes after clean rebuild)
 

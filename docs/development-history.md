@@ -96,6 +96,15 @@ Chronological record of PathHunter’s establishment as an independently identif
 - PortSwigger file-upload labs and Burp GUI: NOT RUN.
 - Details: `docs/phases/phase-4.4-file-content-validation-engine.md`.
 
+## Phase 4.5.1 — Managed Execution Architecture & Multipart Request Builder (2026-11-14)
+
+- Added `fileupload.execution` manager, lifecycle, authorization policy (disabled), and byte-safe multipart request builder.
+- Supports isolated `TARGET_FILENAME` / `TARGET_PART_CONTENT_TYPE` / `TARGET_PART_CONTENT_BYTES` preparation with integrity/diff/redaction.
+- File Upload → Managed Testing GUI (prepare only; no Execute / no HTTP).
+- ManagedRequestBuilderSmoke 73/73 (+2 SKIP); full regression suite passed.
+- Burp GUI: NOT RUN. No HTTP requests sent.
+- Details: `docs/phases/phase-4.5.1-managed-execution-architecture.md`.
+
 ## License continuity
 
 Throughout all phases: GPL-3.0 (`LICENSE`), original authorship attribution preserved in `NOTICE` and inherited source headers. Public marketing text does not replace those legal obligations.
