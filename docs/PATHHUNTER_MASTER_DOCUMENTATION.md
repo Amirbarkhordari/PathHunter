@@ -502,7 +502,7 @@ Concise milestones (see `CHANGELOG.md` for release notes).
 | 2026-11-14 | Phase 4.3 MIME | `5a0888a` | MimeValidationSmoke 78/78 |
 | 2026-11-14 | Phase 4.4 Content | `9ba4308` | FileContentValidationSmoke 91/91 |
 | 2026-11-14 | Phase 4.5.1 Managed prepare | `a4ebc82` | ManagedRequestBuilderSmoke 73/73; JAR ~336 KiB |
-| 2026-11-14 | Docs consolidation | see CHANGELOG `[0.8.1]` | Single master document; phase MD files removed; `tools/docs/validate-master-docs.ps1` |
+| 2026-11-14 | Docs consolidation | `d7c5513` | Single master document; phase MD files removed; `tools/docs/validate-master-docs.ps1` |
 
 ---
 
