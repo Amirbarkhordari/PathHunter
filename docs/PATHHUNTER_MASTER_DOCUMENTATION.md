@@ -516,7 +516,7 @@ Concise milestones (see `CHANGELOG.md` for release notes).
 | 2026-11-14 | Phase 4.4 Content | `9ba4308` | FileContentValidationSmoke 91/91 |
 | 2026-11-14 | Phase 4.5.1 Managed prepare | `a4ebc82` | ManagedRequestBuilderSmoke 73/73; JAR ~336 KiB |
 | 2026-11-14 | Docs consolidation | `d7c5513` | Single master document; phase MD files removed; `tools/docs/validate-master-docs.ps1` |
-| 2026-11-14 | Phase 4.5.2–4.5.4 execute/analyze/evidence | *(this release)* | ControlledExecutionSmoke 51/51; JAR ~397 KiB |
+| 2026-11-14 | Phase 4.5.2–4.5.4 execute/analyze/evidence | `247b495` | ControlledExecutionSmoke 51/51; JAR ~397 KiB |
 
 ---
 
