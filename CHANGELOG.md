@@ -6,7 +6,37 @@ All notable changes to PathHunter are documented in this file.
 
 ### Planned
 
-- Further path-traversal engine enhancements beyond absolute paths (see README roadmap)
+- Further path-traversal engine enhancements (see README roadmap)
+
+## [0.3.0] – 2026-11-13
+
+### Added
+
+- **URL Encoding & Decode-Order Bypass Engine** (`UrlEncodingEngine`).
+- Strategies: single / double / triple URL encoding, mixed encoding, mixed separators, case variants, combined depths.
+- Bounded encoding depth (default 2, max 5) and payload cap (400).
+- Local decode-stage simulator for preview/analysis (no network).
+- **URL Encoding** configuration tab with preview.
+- `tools/smoke/UrlEncodingSmoke.java` (31 checks).
+- Phase write-up: `docs/phases/phase-2.2-url-encoding-engine.md`.
+
+### Changed
+
+- Extended `psychoPayload` metadata for encoding strategy fields (compatible defaults).
+- URL encoding payloads are additive and **disabled by default**.
+
+### Tests
+
+| Check | Result |
+| --- | --- |
+| UrlEncodingSmoke | 31/31 |
+| AbsolutePathSmoke | 33/33 |
+| Smoke | 29/29 |
+| LoadCheck | 11/11 |
+| ProveBlock | Pass |
+| ScanLikeBurp | 1 candidate |
+
+PortSwigger Academy superfluous URL-decode lab: documented manual procedure only; not executed here.
 
 ## [0.2.0] – 2026-11-13
 

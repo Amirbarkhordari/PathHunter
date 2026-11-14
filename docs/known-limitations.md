@@ -38,6 +38,7 @@ These are properties of the current source. They were not changed in this phase.
 - `SimpleDocumentListener` has no callers (source).
 - `addFilePrefix` is never read, so `file:///` prefixes from the TODO are not generated (source).
 - Absolute path payloads (Phase 2.1) are opt-in via the Absolute paths tab. They are not a separate Intruder generator factory; they augment Path traversal when enabled. PortSwigger Academy absolute-path lab success was not verified in automation.
+- URL encoding payloads (Phase 2.2) are opt-in via the URL Encoding tab and use a separate engine from the legacy Evasive `encodingsEnabled` pipeline (intentional). Payload count is capped. Decode-stage preview is local simulation only and does not determine a remote target's filter order. PortSwigger superfluous URL-decode lab was not live-tested here.
 
 ## Scanner
 

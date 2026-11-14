@@ -2,11 +2,31 @@
 
 No JUnit suite exists in the repository. PHP and Perl are not installed, so fixtures under `test_cases/` and `perl/` were not executed. No request was sent to an external host. Burp GUI Extender load was **not** opened in automation.
 
-Harness sources: `tools/smoke/` (`LoadCheck`, `ProveBlock`, `ScanLikeBurp`, `Smoke`, `AbsolutePathSmoke`).
+Harness sources: `tools/smoke/` (`LoadCheck`, `ProveBlock`, `ScanLikeBurp`, `Smoke`, `AbsolutePathSmoke`, `UrlEncodingSmoke`).
 
 ---
 
-## Phase 2.1 — 2026-11-13 (authoritative for current tree)
+## Phase 2.2 — 2026-11-13 (authoritative for current tree)
+
+**Artifact:** `dist/PathHunter.jar` (102394 bytes after clean rebuild)
+
+| Check | Expected | Actual | Status |
+| --- | --- | --- | --- |
+| Compilation `--release 8` | Exit 0 | Exit 0 | Pass |
+| JAR contains `UrlEncodingEngine` | Present | Present | Pass |
+| UrlEncodingSmoke | All cases | **31/31** | Pass |
+| AbsolutePathSmoke | 33/33 | **33/33** | Pass |
+| Smoke | 29/29 | **29/29** | Pass |
+| LoadCheck | 11/11 | **11/11** | Pass |
+| ProveBlock | Pass | Pass | Pass |
+| ScanLikeBurp | 1 candidate | 1 candidate | Pass |
+| PortSwigger superfluous URL-decode lab | Live solve | Not run | Manual only |
+
+Evidence: `build/urlencoding-smoke-results.txt`.
+
+---
+
+## Phase 2.1 — 2026-11-13 (historical)
 
 **Artifact:** `dist/PathHunter.jar` (85088 bytes after clean rebuild)
 

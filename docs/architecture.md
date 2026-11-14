@@ -6,6 +6,8 @@ PathHunter is a single Burp entry class, a Swing tab, and one payload engine reu
 
 **Absolute paths (Phase 2.1):** When enabled on the Absolute paths tab, `IntruderPayloadGenerator.appendAbsolutePathPayloads` appends validated bare absolute filesystem paths (Linux / Windows / custom) after standard traversal construction and before terminator expansion. Helpers live in `AbsolutePathEngine`. Strategy tags on `psychoPayload` distinguish `STANDARD_TRAVERSAL` from absolute strategies.
 
+**URL encoding (Phase 2.2):** When enabled on the URL Encoding tab, `appendUrlEncodingPayloads` appends decode-order bypass candidates from `UrlEncodingEngine` after absolute paths and before terminators. This path does **not** re-apply the legacy `encodingsEnabled` tables, avoiding unintended double processing. `psychoPayload` may carry encoding depth / transformation metadata.
+
 ## Diagram
 
 ```mermaid

@@ -14,6 +14,7 @@ PathHunter is GPL-3.0. Later changes must keep that license, original copyright 
 | 1.1 | GitHub description/topics, tests, commit, push; Leave fork network | Complete (`fork: false` verified) |
 | 1.2 | Public branding presentation | Complete |
 | 2.1 | Absolute Path Payload Engine | Complete (lab manual procedure only) |
+| 2.2 | URL Encoding & Decode-Order Bypass Engine | Complete (lab manual procedure only) |
 
 ## Planned product directions (not implemented)
 

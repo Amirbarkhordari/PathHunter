@@ -42,6 +42,7 @@ The following are present in the current sources and have been exercised by the 
 | --- | --- | --- |
 | Path traversal payload generator | Implemented | Configurable roots, targets, suffixes, traversal depth, evasive patterns |
 | Absolute filesystem path payloads | Implemented | Optional Absolute paths tab; bare paths such as `/etc/passwd` without `../` (off by default) |
+| URL encoding / decode-order bypass | Implemented | Optional URL Encoding tab; single/double/triple/mixed/case variants; decode preview (off by default) |
 | LFI / arbitrary file read mode | Implemented | Default LFI mode on; scanner match rules for common file signatures |
 | Active Scanner LFI check | Implemented | Gated by “Enable Scanner checks”; not run against remote hosts in automation |
 | File-upload path scenarios | Payload only | Intruder-driven; covers in-root / out-of-root / no-traversal discovery patterns |
@@ -145,8 +146,9 @@ Contributions should preserve GPL-3.0, keep copyright / `@author` notices on inh
 | [docs/known-limitations.md](docs/known-limitations.md) | Known defects |
 | [docs/development-roadmap.md](docs/development-roadmap.md) | Planned work |
 | [docs/phases/phase-2.1-absolute-path-engine.md](docs/phases/phase-2.1-absolute-path-engine.md) | Absolute path engine (Phase 2.1) |
+| [docs/phases/phase-2.2-url-encoding-engine.md](docs/phases/phase-2.2-url-encoding-engine.md) | URL encoding engine (Phase 2.2) |
 
-Regression harness sources: `tools/smoke/` (`Smoke`, `AbsolutePathSmoke`, LoadCheck, ProveBlock, ScanLikeBurp).
+Regression harness sources: `tools/smoke/` (`Smoke`, `AbsolutePathSmoke`, `UrlEncodingSmoke`, LoadCheck, ProveBlock, ScanLikeBurp).
 
 ---
 

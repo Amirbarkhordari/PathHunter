@@ -54,6 +54,14 @@ Chronological record of PathHunter’s establishment as an independently identif
 - Documented PortSwigger Academy manual validation; lab not executed here.
 - Details: `docs/phases/phase-2.1-absolute-path-engine.md`.
 
+## Phase 2.2 — URL Encoding & Decode-Order Bypass Engine (2026-11-13)
+
+- Added `UrlEncodingEngine` with single/double/triple/mixed/case/separator strategies and decode simulator.
+- New URL Encoding UI tab with bounded depth and preview.
+- Additive Intruder integration; Absolute Path and standard traversal regressions intact.
+- UrlEncodingSmoke 31/31; full smoke/regression suite passed.
+- Details: `docs/phases/phase-2.2-url-encoding-engine.md`.
+
 ## License continuity
 
 Throughout all phases: GPL-3.0 (`LICENSE`), original authorship attribution preserved in `NOTICE` and inherited source headers. Public marketing text does not replace those legal obligations.
