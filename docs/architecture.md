@@ -139,6 +139,10 @@ There is no properties file. `PsychoPanel2` is both the view and the configurati
 
 All extension **implementation** sources live under `Java/src/uk/co/pentest/` with `package uk.co.pentest.psychoPATH`. No project class remains in `package burp` (Phase 0.1); only allowlisted `burp.*` **API interfaces** are imported from the Burp runtime. The directory is `uk/co/pentest`, without a `psychoPATH` folder. `javac` accepts that when the files are passed explicitly. Class files are emitted under `uk/co/pentest/psychoPATH/`, matching the package.
 
+### File Upload module (Phase 4.1)
+
+Passive analysis lives in `package uk.co.pentest.psychoPATH.fileupload` under `Java/src/uk/co/pentest/fileupload/`. `Menu` hands selected request bytes to `PsychoPanel2.sendToFileUploadAnalyzer` → `FileUploadPanel` → `FileUploadRequestAnalyzer`. Path Traversal engines are unchanged. Active managed upload testing is deferred; see `docs/phases/phase-4.1-file-upload-request-analyzer.md`.
+
 ## Error handling
 
 There is no shared error type. Failures are local:

@@ -45,6 +45,7 @@ The following are present in the current sources and have been exercised by the 
 | URL encoding / decode-order bypass | Implemented | Optional URL Encoding tab; single/double/triple/mixed/case variants; decode preview (off by default) |
 | LFI / arbitrary file read mode | Implemented | Default LFI mode on; scanner match rules for common file signatures |
 | Active Scanner LFI check | Implemented | Gated by “Enable Scanner checks”; not run against remote hosts in automation |
+| File Upload Request Analyzer | Implemented | Passive multipart/binary analysis, signatures, File Upload tab, context-menu handoff (no active uploads) |
 | File-upload path scenarios | Payload only | Intruder-driven; covers in-root / out-of-root / no-traversal discovery patterns |
 | Document-root lists (nix / Windows / app servers) | Implemented | Built-in lists; `{TARGET}` substitution (with known edge cases) |
 | Directory checker | Partial | Driven from site-map–derived suffixes; UI list wiring has known gaps |
@@ -94,12 +95,14 @@ Burp Suite (legacy Extender API)
         │     ├─ byte generator
         │     └─ path / check / mark generators
         ├─ DirectScannerCheck         (optional active scan)
-        └─ Menu                       (context menu → scope)
+        ├─ Menu                       (context menu → scope / File Upload Analyzer)
+        └─ fileupload.*               (passive upload request analysis)
 ```
 
 - **User-facing brand:** PathHunter (extension name and tab caption).
 - **API surface:** `burp.IBurpExtender` and related legacy interfaces (not Montoya yet).
 - Technical Java package and class names are retained for compatibility; see `docs/architecture.md`.
+- File Upload details: `docs/phases/phase-4.1-file-upload-request-analyzer.md`.
 
 ---
 
@@ -107,6 +110,8 @@ Burp Suite (legacy Extender API)
 
 The items below are **planned**, not implemented.
 
+- Phase 4.2 – Filename & Extension Testing Engine
+- Managed File Upload Testing (planner / executor / response analysis)
 - Advanced Path Traversal Payload Engine (further variants beyond absolute paths)
 - Advanced Encoding and Traversal Variants
 - Linux and Windows Path Strategies (hardening and completeness)
@@ -147,8 +152,9 @@ Contributions should preserve GPL-3.0, keep copyright / `@author` notices on inh
 | [docs/development-roadmap.md](docs/development-roadmap.md) | Planned work |
 | [docs/phases/phase-2.1-absolute-path-engine.md](docs/phases/phase-2.1-absolute-path-engine.md) | Absolute path engine (Phase 2.1) |
 | [docs/phases/phase-2.2-url-encoding-engine.md](docs/phases/phase-2.2-url-encoding-engine.md) | URL encoding engine (Phase 2.2) |
+| [docs/phases/phase-4.1-file-upload-request-analyzer.md](docs/phases/phase-4.1-file-upload-request-analyzer.md) | File Upload Request Analyzer (Phase 4.1) |
 
-Regression harness sources: `tools/smoke/` (`Smoke`, `AbsolutePathSmoke`, `UrlEncodingSmoke`, LoadCheck, ProveBlock, ScanLikeBurp).
+Regression harness sources: `tools/smoke/` (`Smoke`, `AbsolutePathSmoke`, `UrlEncodingSmoke`, `FileUploadAnalyzerSmoke`, LoadCheck, ProveBlock, ScanLikeBurp).
 
 ---
 

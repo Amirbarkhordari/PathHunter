@@ -20,10 +20,13 @@ Working directory `D:\Projects\PathHunter`. JDK `C:\Program Files\Java\jdk-24\bi
 javac --release 8 -encoding UTF-8 -Xlint:-options ^
   -cp C:\Users\Amir\Documents\Burp.Suite.Professional.2026.4.3\burpsuite_desktop_v2026.4.3.jar ^
   -d build\classes ^
-  Java\src\uk\co\pentest\*.java
+  Java\src\uk\co\pentest\*.java ^
+  Java\src\uk\co\pentest\fileupload\*.java
 
 jar --create --file dist\PathHunter.jar --manifest build\MANIFEST.MF -C build\classes .
 ```
+
+Phase 4.1 added the `fileupload` subpackage; both globs are required.
 
 Compile exit code 0. Notes only: deprecated API and unchecked operations.
 

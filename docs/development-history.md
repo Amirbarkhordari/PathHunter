@@ -62,6 +62,14 @@ Chronological record of PathHunter’s establishment as an independently identif
 - UrlEncodingSmoke 31/31; full smoke/regression suite passed.
 - Details: `docs/phases/phase-2.2-url-encoding-engine.md`.
 
+## Phase 4.1 — File Upload Request Analyzer (2026-11-14)
+
+- Added independent `fileupload` package: analyzer, multipart parser, signature inspector, models, GUI panel.
+- Context menu handoff; File Upload tab; no active uploads or fake execution controls.
+- FileUploadAnalyzerSmoke 80/80 (+2 SKIP Burp GUI); full regression suite passed.
+- PortSwigger file-upload labs and Burp desktop GUI verification: NOT RUN.
+- Details: `docs/phases/phase-4.1-file-upload-request-analyzer.md`.
+
 ## License continuity
 
 Throughout all phases: GPL-3.0 (`LICENSE`), original authorship attribution preserved in `NOTICE` and inherited source headers. Public marketing text does not replace those legal obligations.

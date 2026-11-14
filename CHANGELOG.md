@@ -6,7 +6,43 @@ All notable changes to PathHunter are documented in this file.
 
 ### Planned
 
+- Phase 4.2 – Filename & Extension Testing Engine (not started)
 - Further path-traversal engine enhancements (see README roadmap)
+
+## [0.4.0] – 2026-11-14
+
+### Added
+
+- **File Upload Request Analyzer** (`uk.co.pentest.psychoPATH.fileupload`).
+- Byte-oriented `MultipartParser` with binary-safe part extraction and resource limits.
+- `FileSignatureInspector` for common magic-byte signatures (JPEG/PNG/GIF/PDF/ZIP/GZIP/BMP/WEBP/ELF/PE).
+- Structured models: `UploadRequestResult`, `UploadPart`, `UploadFileMetadata`, `UploadAnalysisWarning`, plus empty `UploadTestPlan` / `UploadTestCase` for future managed testing.
+- **File Upload** suite tab (`FileUploadPanel`) for passive analysis display.
+- Context menu: **Send to PathHunter File Upload Analyzer**.
+- `tools/smoke/FileUploadAnalyzerSmoke.java` (80 pass / 2 skipped Burp-runtime checks).
+- Phase write-up: `docs/phases/phase-4.1-file-upload-request-analyzer.md`.
+
+### Changed
+
+- Compile set now includes `Java/src/uk/co/pentest/fileupload/*.java`.
+
+### Not in this release
+
+- Active/managed upload testing, filename/extension/MIME bypass engines, polyglot generation, response-based verification.
+
+### Tests
+
+| Check | Result |
+| --- | --- |
+| FileUploadAnalyzerSmoke | 80/80 (+2 SKIP Burp GUI) |
+| UrlEncodingSmoke | 31/31 |
+| AbsolutePathSmoke | 33/33 |
+| Smoke | 29/29 |
+| LoadCheck | 11/11 |
+| ProveBlock | Pass |
+| ScanLikeBurp | 1 candidate |
+
+PortSwigger file-upload labs: documented manual procedure only; not executed here.
 
 ## [0.3.0] – 2026-11-13
 

@@ -2,11 +2,35 @@
 
 No JUnit suite exists in the repository. PHP and Perl are not installed, so fixtures under `test_cases/` and `perl/` were not executed. No request was sent to an external host. Burp GUI Extender load was **not** opened in automation.
 
-Harness sources: `tools/smoke/` (`LoadCheck`, `ProveBlock`, `ScanLikeBurp`, `Smoke`, `AbsolutePathSmoke`, `UrlEncodingSmoke`).
+Harness sources: `tools/smoke/` (`LoadCheck`, `ProveBlock`, `ScanLikeBurp`, `Smoke`, `AbsolutePathSmoke`, `UrlEncodingSmoke`, `FileUploadAnalyzerSmoke`).
 
 ---
 
-## Phase 2.2 — 2026-11-13 (authoritative for current tree)
+## Phase 4.1 — 2026-11-14 (authoritative for current tree)
+
+**Artifact:** `dist/PathHunter.jar` (141838 bytes after clean rebuild)
+
+| Check | Expected | Actual | Status |
+| --- | --- | --- | --- |
+| Compilation `--release 8` | Exit 0 | Exit 0 | Pass |
+| JAR contains `fileupload.*` | Present | Present | Pass |
+| No bundled `burp/` API classes | 0 | 0 | Pass |
+| Bytecode major version | 52 | 52 | Pass |
+| FileUploadAnalyzerSmoke | 80 pass / 0 fail | **80/80** (+2 SKIP) | Pass |
+| UrlEncodingSmoke | 31/31 | **31/31** | Pass |
+| AbsolutePathSmoke | 33/33 | **33/33** | Pass |
+| Smoke | 29/29 | **29/29** | Pass |
+| LoadCheck | 11/11 | **11/11** | Pass |
+| ProveBlock | Pass | Pass | Pass |
+| ScanLikeBurp | 1 candidate | 1 candidate | Pass |
+| Burp GUI / context-menu live | Manual | Not run | NOT RUN |
+| PortSwigger file-upload labs | Live parse check | Not run | NOT RUN |
+
+Evidence: `build/fileupload-smoke-results.txt`, `build/loadcheck-results.txt`.
+
+---
+
+## Phase 2.2 — 2026-11-13 (historical)
 
 **Artifact:** `dist/PathHunter.jar` (102394 bytes after clean rebuild)
 

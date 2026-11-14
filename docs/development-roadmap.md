@@ -15,11 +15,14 @@ PathHunter is GPL-3.0. Later changes must keep that license, original copyright 
 | 1.2 | Public branding presentation | Complete |
 | 2.1 | Absolute Path Payload Engine | Complete (lab manual procedure only) |
 | 2.2 | URL Encoding & Decode-Order Bypass Engine | Complete (lab manual procedure only) |
+| 4.1 | File Upload Request Analyzer | Complete (passive; Burp GUI / Academy labs NOT RUN) |
 
 ## Planned product directions (not implemented)
 
 Clearly marked as future work in the README:
 
+- Phase 4.2 – Filename & Extension Testing Engine
+- Managed File Upload Testing (planner / executor / response analysis / evidence)
 - Advanced Path Traversal Payload Engine (further techniques beyond absolute paths)
 - Advanced Encoding and Traversal Variants
 - Linux and Windows Path Strategies (completeness / hardening)
