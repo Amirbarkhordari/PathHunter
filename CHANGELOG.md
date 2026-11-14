@@ -7,7 +7,20 @@ All notable changes to PathHunter are documented in this file.
 ### Planned
 
 - Phase 4.5.2 – Controlled HTTP Execution Engine (not started)
-- Further path-traversal engine enhancements (see README roadmap)
+- Further path-traversal engine enhancements (see master documentation roadmap)
+
+## [0.8.1] – 2026-11-14
+
+### Changed
+
+- Consolidated project documentation into canonical [docs/PATHHUNTER_MASTER_DOCUMENTATION.md](docs/PATHHUNTER_MASTER_DOCUMENTATION.md).
+- Slimmed README.md to user-facing summary with link to the master document.
+- Removed obsolete per-phase Markdown files under `docs/phases/` after migrating content into the master document.
+- Future phases update the master document and `CHANGELOG.md` only (no new phase-specific docs).
+
+### Added
+
+- `tools/docs/validate-master-docs.ps1` lightweight documentation validation script.
 
 ## [0.8.0] – 2026-11-14
 
@@ -18,7 +31,7 @@ All notable changes to PathHunter are documented in this file.
 - Sensitive header redaction for previews (Cookie / Authorization / CSRF).
 - File Upload → **Managed Testing** GUI (prepare/validate/preview only; no Execute / no HTTP).
 - `tools/smoke/ManagedRequestBuilderSmoke.java` (73 pass / 2 skipped).
-- Phase write-up: `docs/phases/phase-4.5.1-managed-execution-architecture.md`.
+- See `docs/PATHHUNTER_MASTER_DOCUMENTATION.md` (phase details consolidated).
 
 ### Not in this release
 
@@ -50,7 +63,7 @@ All notable changes to PathHunter are documented in this file.
 - Extended `UploadTestCase` / `UploadTestPlan` with `CATEGORY_CONTENT`, `TARGET_PART_CONTENT_BYTES`, content hashes/lengths, `FileContentAnalysisResult`.
 - File Upload → **Content Testing** GUI sub-tab (no Execute).
 - `tools/smoke/FileContentValidationSmoke.java` (91 pass / 2 skipped).
-- Phase write-up: `docs/phases/phase-4.4-file-content-validation-engine.md`.
+- See `docs/PATHHUNTER_MASTER_DOCUMENTATION.md` (phase details consolidated).
 
 ### Not in this release
 
@@ -83,7 +96,7 @@ PortSwigger file-upload labs: documented manual procedure only; not executed her
 - Extended `UploadTestCase` with `CATEGORY_MIME`, `TARGET_PART_CONTENT_TYPE`, MIME fields.
 - File Upload → **MIME Testing** GUI sub-tab (no Execute).
 - `tools/smoke/MimeValidationSmoke.java` (78 pass / 2 skipped).
-- Phase write-up: `docs/phases/phase-4.3-mime-validation-testing-engine.md`.
+- See `docs/PATHHUNTER_MASTER_DOCUMENTATION.md` (phase details consolidated).
 
 ### Not in this release
 
@@ -115,7 +128,7 @@ PortSwigger Content-Type lab: documented manual procedure only; not executed her
 - Extended `UploadTestCase` / `UploadTestPlan` for structured planning (`NOT_EXECUTED`).
 - File Upload → **Filename Testing** GUI sub-tab (generate/select/deselect; no Execute).
 - `tools/smoke/FilenameTestingSmoke.java` (80 pass / 2 skipped).
-- Phase write-up: `docs/phases/phase-4.2-filename-extension-testing-engine.md`.
+- See `docs/PATHHUNTER_MASTER_DOCUMENTATION.md` (phase details consolidated).
 
 ### Not in this release
 
@@ -147,7 +160,7 @@ PortSwigger file-upload labs: documented manual procedure only; not executed her
 - **File Upload** suite tab (`FileUploadPanel`) for passive analysis display.
 - Context menu: **Send to PathHunter File Upload Analyzer**.
 - `tools/smoke/FileUploadAnalyzerSmoke.java` (80 pass / 2 skipped Burp-runtime checks).
-- Phase write-up: `docs/phases/phase-4.1-file-upload-request-analyzer.md`.
+- See `docs/PATHHUNTER_MASTER_DOCUMENTATION.md` (phase details consolidated).
 
 ### Changed
 
@@ -181,7 +194,7 @@ PortSwigger file-upload labs: documented manual procedure only; not executed her
 - Local decode-stage simulator for preview/analysis (no network).
 - **URL Encoding** configuration tab with preview.
 - `tools/smoke/UrlEncodingSmoke.java` (31 checks).
-- Phase write-up: `docs/phases/phase-2.2-url-encoding-engine.md`.
+- See `docs/PATHHUNTER_MASTER_DOCUMENTATION.md` (phase details consolidated).
 
 ### Changed
 
@@ -210,7 +223,7 @@ PortSwigger Academy superfluous URL-decode lab: documented manual procedure only
 - `AbsolutePathEngine` helper for OS-specific validation, encoding, and deduplication.
 - Payload strategy tags: `STANDARD_TRAVERSAL`, `ABSOLUTE_LINUX`, `ABSOLUTE_WINDOWS`, `ABSOLUTE_CUSTOM`.
 - `tools/smoke/AbsolutePathSmoke.java` (33 automated checks).
-- Phase write-up: `docs/phases/phase-2.1-absolute-path-engine.md`.
+- See `docs/PATHHUNTER_MASTER_DOCUMENTATION.md` (phase details consolidated).
 
 ### Changed
 

@@ -1,3 +1,6 @@
+> **Canonical documentation:** [PATHHUNTER_MASTER_DOCUMENTATION.md](PATHHUNTER_MASTER_DOCUMENTATION.md).
+> This file is supplemental/historical. Prefer the master document if details differ.
+
 # Known limitations
 
 These are properties of the current source. They were not changed in this phase. "Observed" means the smoke harness hit them. "Source" means they were read in the code and not executed as a separate case.

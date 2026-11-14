@@ -1,3 +1,6 @@
+> **Canonical documentation:** [PATHHUNTER_MASTER_DOCUMENTATION.md](PATHHUNTER_MASTER_DOCUMENTATION.md).
+> This file is supplemental/historical. Prefer the master document if details differ.
+
 # PathHunter development history
 
 Chronological record of PathHunter’s establishment as an independently identified project. Dates use the local Phase work calendar.
@@ -52,7 +55,7 @@ Chronological record of PathHunter’s establishment as an independently identif
 - New Absolute paths UI tab; additive Intruder Path traversal payloads; encoding via existing tables.
 - AbsolutePathSmoke 33/33; Smoke 29/29; LoadCheck / ProveBlock / ScanLikeBurp regression passed.
 - Documented PortSwigger Academy manual validation; lab not executed here.
-- Details: `docs/phases/phase-2.1-absolute-path-engine.md`.
+- Details: `docs/PATHHUNTER_MASTER_DOCUMENTATION.md`.
 
 ## Phase 2.2 — URL Encoding & Decode-Order Bypass Engine (2026-11-13)
 
@@ -60,7 +63,7 @@ Chronological record of PathHunter’s establishment as an independently identif
 - New URL Encoding UI tab with bounded depth and preview.
 - Additive Intruder integration; Absolute Path and standard traversal regressions intact.
 - UrlEncodingSmoke 31/31; full smoke/regression suite passed.
-- Details: `docs/phases/phase-2.2-url-encoding-engine.md`.
+- Details: `docs/PATHHUNTER_MASTER_DOCUMENTATION.md`.
 
 ## Phase 4.1 — File Upload Request Analyzer (2026-11-14)
 
@@ -68,7 +71,7 @@ Chronological record of PathHunter’s establishment as an independently identif
 - Context menu handoff; File Upload tab; no active uploads or fake execution controls.
 - FileUploadAnalyzerSmoke 80/80 (+2 SKIP Burp GUI); full regression suite passed.
 - PortSwigger file-upload labs and Burp desktop GUI verification: NOT RUN.
-- Details: `docs/phases/phase-4.1-file-upload-request-analyzer.md`.
+- Details: `docs/PATHHUNTER_MASTER_DOCUMENTATION.md`.
 
 ## Phase 4.2 — Filename & Extension Testing Engine (2026-11-14)
 
@@ -76,7 +79,7 @@ Chronological record of PathHunter’s establishment as an independently identif
 - File Upload → Filename Testing GUI for strategy selection and plan preview (`NOT_EXECUTED`).
 - FilenameTestingSmoke 80/80 (+2 SKIP); Phase 4.1 and path-traversal regressions intact.
 - PortSwigger labs and Burp GUI: NOT RUN.
-- Details: `docs/phases/phase-4.2-filename-extension-testing-engine.md`.
+- Details: `docs/PATHHUNTER_MASTER_DOCUMENTATION.md`.
 
 ## Phase 4.3 — MIME Validation Testing Engine (2026-11-14)
 
@@ -85,7 +88,7 @@ Chronological record of PathHunter’s establishment as an independently identif
 - File Upload → MIME Testing GUI; Filename Testing and Analyzer unchanged in behaviour.
 - MimeValidationSmoke 78/78 (+2 SKIP); full regression suite passed.
 - PortSwigger Content-Type lab and Burp GUI: NOT RUN.
-- Details: `docs/phases/phase-4.3-mime-validation-testing-engine.md`.
+- Details: `docs/PATHHUNTER_MASTER_DOCUMENTATION.md`.
 
 ## Phase 4.4 — File Content Validation Engine (2026-11-14)
 
@@ -94,7 +97,7 @@ Chronological record of PathHunter’s establishment as an independently identif
 - File Upload → Content Testing GUI; Phases 4.1–4.3 behaviour preserved.
 - FileContentValidationSmoke 91/91 (+2 SKIP); full regression suite passed.
 - PortSwigger file-upload labs and Burp GUI: NOT RUN.
-- Details: `docs/phases/phase-4.4-file-content-validation-engine.md`.
+- Details: `docs/PATHHUNTER_MASTER_DOCUMENTATION.md`.
 
 ## Phase 4.5.1 — Managed Execution Architecture & Multipart Request Builder (2026-11-14)
 
@@ -103,7 +106,7 @@ Chronological record of PathHunter’s establishment as an independently identif
 - File Upload → Managed Testing GUI (prepare only; no Execute / no HTTP).
 - ManagedRequestBuilderSmoke 73/73 (+2 SKIP); full regression suite passed.
 - Burp GUI: NOT RUN. No HTTP requests sent.
-- Details: `docs/phases/phase-4.5.1-managed-execution-architecture.md`.
+- Details: `docs/PATHHUNTER_MASTER_DOCUMENTATION.md`.
 
 ## License continuity
 

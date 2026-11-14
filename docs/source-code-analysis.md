@@ -1,3 +1,6 @@
+> **Canonical documentation:** [PATHHUNTER_MASTER_DOCUMENTATION.md](PATHHUNTER_MASTER_DOCUMENTATION.md).
+> This file is supplemental/historical. Prefer the master document if details differ.
+
 # Source code analysis
 
 Fifteen Java files, one NetBeans form, one Perl script, and the fixture tree. Line references match the checkout at `e29eb6b`.

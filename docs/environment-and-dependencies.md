@@ -1,3 +1,6 @@
+> **Canonical documentation:** [PATHHUNTER_MASTER_DOCUMENTATION.md](PATHHUNTER_MASTER_DOCUMENTATION.md).
+> This file is supplemental/historical. Prefer the master document if details differ.
+
 # Environment and dependencies
 
 ## Phase 0.1 note

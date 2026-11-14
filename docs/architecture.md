@@ -1,3 +1,6 @@
+> **Canonical documentation:** [PATHHUNTER_MASTER_DOCUMENTATION.md](PATHHUNTER_MASTER_DOCUMENTATION.md).
+> This file is supplemental/historical. Prefer the master document if details differ.
+
 # PathHunter architecture
 
 PathHunter is a single Burp entry class, a Swing tab, and one payload engine reused by Intruder, by the Save/Copy buttons, and by the active Scanner check. There is no separate service layer, no configuration file, and no database. All options live in `PsychoPanel2` fields and Swing models.
@@ -141,7 +144,7 @@ All extension **implementation** sources live under `Java/src/uk/co/pentest/` wi
 
 ### File Upload module (Phase 4.1)
 
-Passive analysis lives in `package uk.co.pentest.psychoPATH.fileupload` under `Java/src/uk/co/pentest/fileupload/`. `Menu` hands selected request bytes to `PsychoPanel2.sendToFileUploadAnalyzer` → `FileUploadPanel` → `FileUploadRequestAnalyzer`. Phase 4.2 adds `FilenameTestingEngine`; Phase 4.3 adds `MimeValidationEngine` for MIME/extension/signature comparison and MIME plans (`NOT_EXECUTED`, `TARGET_PART_CONTENT_TYPE`). Phase 4.4 adds `FileContentValidationEngine` for bounded content structure checks, SHA-256, and content plans (`NOT_EXECUTED`, `TARGET_PART_CONTENT_BYTES`) without mutating original part bytes. Phase 4.5.1 adds `fileupload.execution` (`ManagedExecutionManager`, `MultipartRequestBuilder`) to validate and rebuild modified multipart requests **in memory only** (no HTTP send). Path Traversal engines are unchanged. Controlled HTTP execution is deferred to Phase 4.5.2; see phase docs under `docs/phases/`.
+Passive analysis lives in `package uk.co.pentest.psychoPATH.fileupload` under `Java/src/uk/co/pentest/fileupload/`. `Menu` hands selected request bytes to `PsychoPanel2.sendToFileUploadAnalyzer` → `FileUploadPanel` → `FileUploadRequestAnalyzer`. Phase 4.2 adds `FilenameTestingEngine`; Phase 4.3 adds `MimeValidationEngine` for MIME/extension/signature comparison and MIME plans (`NOT_EXECUTED`, `TARGET_PART_CONTENT_TYPE`). Phase 4.4 adds `FileContentValidationEngine` for bounded content structure checks, SHA-256, and content plans (`NOT_EXECUTED`, `TARGET_PART_CONTENT_BYTES`) without mutating original part bytes. Phase 4.5.1 adds `fileupload.execution` (`ManagedExecutionManager`, `MultipartRequestBuilder`) to validate and rebuild modified multipart requests **in memory only** (no HTTP send). Path Traversal engines are unchanged. Controlled HTTP execution is deferred to Phase 4.5.2; see `docs/PATHHUNTER_MASTER_DOCUMENTATION.md`.
 
 ## Error handling
 

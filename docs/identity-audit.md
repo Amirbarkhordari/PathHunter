@@ -1,3 +1,6 @@
+> **Canonical documentation:** [PATHHUNTER_MASTER_DOCUMENTATION.md](PATHHUNTER_MASTER_DOCUMENTATION.md).
+> This file is supplemental/historical. Prefer the master document if details differ.
+
 # PathHunter identity audit
 
 Phase 1 classified branding vs attribution. **Phase 1.2** updates public presentation so PathHunter is the primary brand, while GPL-required provenance remains in `NOTICE` and source headers.

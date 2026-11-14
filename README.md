@@ -1,168 +1,101 @@
 # PathHunter
 
-**Independently maintained Burp Suite extension for path traversal, LFI, and file-upload path testing.**
+**Independently maintained Burp Suite extension for path traversal, LFI, and file-upload security testing.**
 
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
 [![Burp Suite Extension](https://img.shields.io/badge/Burp%20Suite-Extension-orange.svg)](#installation)
 [![Status: Active development](https://img.shields.io/badge/Status-Active%20development-brightgreen.svg)](#roadmap)
 
-PathHunter is a Java extension for Burp Suite that helps security testers find **file path traversal**, **local file inclusion (LFI) / arbitrary file read**, and **file-upload path** issues using configurable payload generators, encoding options, and Intruder/Scanner integration.
+PathHunter helps security testers probe **path traversal**, **LFI / arbitrary file read**, and **file-upload validation** gaps using configurable Intruder generators and a File Upload analysis / planning / request-preparation module.
 
 **Maintainer:** Amir Barkhordari — https://github.com/Amirbarkhordari/PathHunter
+
+**Full technical documentation:** [`docs/PATHHUNTER_MASTER_DOCUMENTATION.md`](docs/PATHHUNTER_MASTER_DOCUMENTATION.md)
 
 ---
 
 ## Introduction
 
-PathHunter generates and applies path-oriented payloads inside Burp Suite so you can probe how an application resolves file paths—especially when filters, encoding, or non-recursive sanitization obscure classic `../` patterns.
+PathHunter loads as a legacy Burp Extender (`IBurpExtender`) Java extension and provides:
 
-**What it is for**
+- A **PathHunter** suite tab for payload and upload configuration
+- Intruder generators: **Path traversal**, **Directory checker**, **Payload marker**, **Byte**
+- Optional active Scanner checks for common LFI indicators
+- File Upload Analyzer with Filename / MIME / Content test planning and in-memory managed request preparation
 
-- Web application security testing (authorized assessments only)
-- Blind or weakly filtered path traversal and LFI hunting
-- File-upload workflows where the upload directory sits inside or outside the document root
-- Directory discovery tied to Burp’s site map (“Directory checker”)
-
-**How it fits Burp Suite**
-
-- Loads as a legacy Extender API (`IBurpExtender`) Java extension
-- Adds a **PathHunter** suite tab for configuration
-- Registers Intruder payload generators (path traversal, directory checker, payload marker, byte)
-- Optionally runs an active Scanner check for common LFI indicators
-
-PathHunter is actively maintained and enhanced for modern Burp Suite compatibility. Planned work is listed under [Roadmap](#roadmap); only verified behaviour is described under [Current features](#current-features).
+Authorized assessments only (including systems you own and PortSwigger Academy labs).
 
 ---
 
 ## Current features
 
-The following are present in the current sources and have been exercised by the local rebuild / smoke harness (see `docs/feature-inventory.md` and `docs/test-results.md`). Features marked *payload only* generate strings for Intruder; they do not perform HTTP file uploads by themselves.
-
 | Area | Status | Notes |
 | --- | --- | --- |
-| Path traversal payload generator | Implemented | Configurable roots, targets, suffixes, traversal depth, evasive patterns |
-| Absolute filesystem path payloads | Implemented | Optional Absolute paths tab; bare paths such as `/etc/passwd` without `../` (off by default) |
-| URL encoding / decode-order bypass | Implemented | Optional URL Encoding tab; single/double/triple/mixed/case variants; decode preview (off by default) |
-| LFI / arbitrary file read mode | Implemented | Default LFI mode on; scanner match rules for common file signatures |
-| Active Scanner LFI check | Implemented | Gated by “Enable Scanner checks”; not run against remote hosts in automation |
-| File Upload Request Analyzer | Implemented | Passive multipart/binary analysis, signatures, File Upload tab, context-menu handoff (no active uploads) |
-| Filename & Extension Testing | Implemented | Filename analysis, extension strategies, structured test plans (`NOT_EXECUTED`); no HTTP execution |
-| MIME Validation Testing | Implemented | MIME parse/compare vs extension & signature; MIME test plans (`NOT_EXECUTED`); no HTTP execution |
-| File Content Validation | Implemented | Bounded PNG/JPEG/GIF/PDF structure, SHA-256, content test plans (`NOT_EXECUTED`); no HTTP execution |
-| Managed request preparation | Implemented | Multipart rebuild for filename/MIME/content targets in memory; Managed Testing tab; no HTTP send |
-| File-upload path scenarios | Payload only | Intruder-driven; covers in-root / out-of-root / no-traversal discovery patterns |
-| Document-root lists (nix / Windows / app servers) | Implemented | Built-in lists; `{TARGET}` substitution (with known edge cases) |
-| Directory checker | Partial | Driven from site-map–derived suffixes; UI list wiring has known gaps |
-| Linux path strategies | Implemented | Nix slashes, `etc/passwd`-style defaults |
-| Windows path strategies | Partial | Win slashes and `win.ini`; some drive / absolute-root UI controls unwired |
-| Output encodings | Partial | RAW, URL (default), double-URL / UTF variants with verified quirks |
-| Evasive traversals / break-up sequences | Implemented | Configurable evasive list and break bytes |
-| Byte generator | Partial | Six ranges; global encoding on byte output not fully wired |
-| Payload marker | Implemented | Fixed-width index for correlating uploads |
-| Payload export / clipboard | Implemented | Save/copy from the UI |
-| Context menu → scope update | Partial | Host propagation works; label/site-map edge cases documented |
-| Modern Burp load (non-`burp` package entry) | Implemented | Entry class under the project package; display name **PathHunter** |
+| Path traversal / LFI payloads | Implemented | Roots, targets, depth, evasive patterns |
+| Absolute path payloads | Implemented | Opt-in Absolute paths tab (off by default) |
+| URL encoding bypass payloads | Implemented | Opt-in URL Encoding tab (off by default) |
+| Active Scanner LFI check | Implemented | Optional; not run against remotes in automation |
+| File Upload Analyzer | Implemented | Passive multipart/binary analysis |
+| Filename / MIME / Content testing | Implemented | Structured plans (`NOT_EXECUTED`); no HTTP send |
+| Managed request preparation | Implemented | In-memory multipart rebuild only; no HTTP send |
+| Directory checker / encodings / byte gen | Partial | See master docs — known limitations |
 
-For limitations and defects already identified, see `docs/known-limitations.md`.
+Details, architecture, and limitations: [`docs/PATHHUNTER_MASTER_DOCUMENTATION.md`](docs/PATHHUNTER_MASTER_DOCUMENTATION.md).
 
 ---
 
 ## Installation
 
-**Artifact:** `dist/PathHunter.jar`
+**Artifact:** `dist/PathHunter.jar`  
+**Entry class:** `uk.co.pentest.psychoPATH.BurpExtender`
 
-1. Open Burp Suite.
-2. Go to **Extensions** → **Installed** → **Add**.
-3. Extension type: **Java**.
-4. Select `dist/PathHunter.jar` from this repository (or your build output).
-5. Confirm the extension loads without errors.
-6. Expect:
-   - Extension name: **PathHunter**
-   - Suite tab: **PathHunter**
-   - Intruder generators: **Byte**, **Directory checker**, **Path traversal**, **Payload marker**
+1. Burp → **Extensions** → **Add** → type **Java**
+2. Select `dist/PathHunter.jar`
+3. Confirm name **PathHunter**, tab **PathHunter**, and Intruder generators above
 
-**Entry class (required by Burp):** `uk.co.pentest.psychoPATH.BurpExtender`
-
-Prefer `dist/PathHunter.jar` for installation. Rebuild instructions: `docs/build-and-installation.md`. Load-failure background: `docs/burp-loading-fix.md`.
+Rebuild: see master documentation §3 (Installation and Configuration). Prefer `dist/PathHunter.jar` over historical `Java/psychoPATH.jar`.
 
 ---
 
-## Architecture
+## Basic usage
 
-PathHunter is a single Burp entry class, a Swing configuration tab, and a shared payload engine used by Intruder, export/copy, and the optional Scanner check.
-
-```text
-Burp Suite (legacy Extender API)
-  └─ BurpExtender (project package)
-        ├─ Suite tab / configuration panel
-        ├─ PayloadFactory ×4          (Intruder)
-        │     ├─ byte generator
-        │     └─ path / check / mark generators
-        ├─ DirectScannerCheck         (optional active scan)
-        ├─ Menu                       (context menu → scope / File Upload Analyzer)
-        └─ fileupload.*               (passive upload request analysis)
-```
-
-- **User-facing brand:** PathHunter (extension name and tab caption).
-- **API surface:** `burp.IBurpExtender` and related legacy interfaces (not Montoya yet).
-- Technical Java package and class names are retained for compatibility; see `docs/architecture.md`.
-- File Upload details: `docs/phases/phase-4.1-file-upload-request-analyzer.md`.
+1. Configure Path Traversal / Absolute Paths / URL Encoding in the PathHunter tab; use Intruder **Path traversal** as needed.
+2. For uploads: send a request via context menu **Send to PathHunter File Upload Analyzer**, or paste raw HTTP into the File Upload Analyzer.
+3. Generate Filename / MIME / Content plans; review candidates (`NOT_EXECUTED`).
+4. Managed Testing: load selected cases → validate → **prepare** requests in memory. **No HTTP is sent** until a future Phase 4.5.2 executor exists.
 
 ---
 
-## Roadmap
-
-The items below are **planned**, not implemented.
-
-- Phase 4.5.2 – Controlled HTTP Execution Engine
-- Response analysis / evidence / reporting for upload tests
-- Advanced Path Traversal Payload Engine (further variants beyond absolute paths)
-- Advanced Encoding and Traversal Variants
-- Linux and Windows Path Strategies (hardening and completeness)
-- Improved LFI detection
-- Response Analysis
-- Better Intruder integration
-- Improved user interface
-- Defect fixes listed in `docs/known-limitations.md` and `docs/development-roadmap.md`
-- Repeatable build scripting (without claiming NetBeans Ant is present)
-
----
-
-## Development and contribution
+## Compatibility
 
 | Item | Value |
 | --- | --- |
-| Project | PathHunter |
-| Maintainer | Amir Barkhordari |
-| Repository | https://github.com/Amirbarkhordari/PathHunter |
-| License | GPL-3.0 (`LICENSE`) |
-| Status | Active development |
+| API | Legacy Burp Extender (not Montoya) |
+| Bytecode | Java 8 (`--release 8`, major version 52) |
+| Artifact | `dist/PathHunter.jar` (no bundled `burp/` API classes) |
 
-Contributions should preserve GPL-3.0, keep copyright / `@author` notices on inherited files, and document substantial changes. Prefer discussing large API migrations (for example Montoya) before large refactors.
+---
+
+## Roadmap (planned — not implemented)
+
+- Phase 4.5.2 – Controlled HTTP Execution Engine
+- Response analysis and evidence reporting
+- Further path / encoding / LFI / UI hardening
+- Defect fixes documented in the master document
+
+---
+
+## Documentation
 
 | Document | Purpose |
 | --- | --- |
-| [CHANGELOG.md](CHANGELOG.md) | Versioned change log |
-| [docs/development-history.md](docs/development-history.md) | Phase chronology |
-| [docs/project-overview.md](docs/project-overview.md) | Project identity and layout |
-| [docs/architecture.md](docs/architecture.md) | Burp integration architecture |
-| [docs/feature-inventory.md](docs/feature-inventory.md) | Verified feature status |
-| [docs/build-and-installation.md](docs/build-and-installation.md) | Build and install |
-| [docs/test-results.md](docs/test-results.md) | Automated test results |
-| [docs/identity-audit.md](docs/identity-audit.md) | Branding vs attribution audit |
-| [docs/github-fork-detachment.md](docs/github-fork-detachment.md) | Fork-network status |
-| [docs/burp-loading-fix.md](docs/burp-loading-fix.md) | Phase 0.1 load failure analysis |
-| [docs/known-limitations.md](docs/known-limitations.md) | Known defects |
-| [docs/development-roadmap.md](docs/development-roadmap.md) | Planned work |
-| [docs/phases/phase-2.1-absolute-path-engine.md](docs/phases/phase-2.1-absolute-path-engine.md) | Absolute path engine (Phase 2.1) |
-| [docs/phases/phase-2.2-url-encoding-engine.md](docs/phases/phase-2.2-url-encoding-engine.md) | URL encoding engine (Phase 2.2) |
-| [docs/phases/phase-4.1-file-upload-request-analyzer.md](docs/phases/phase-4.1-file-upload-request-analyzer.md) | File Upload Request Analyzer (Phase 4.1) |
-| [docs/phases/phase-4.2-filename-extension-testing-engine.md](docs/phases/phase-4.2-filename-extension-testing-engine.md) | Filename & Extension Testing (Phase 4.2) |
-| [docs/phases/phase-4.3-mime-validation-testing-engine.md](docs/phases/phase-4.3-mime-validation-testing-engine.md) | MIME Validation Testing (Phase 4.3) |
-| [docs/phases/phase-4.4-file-content-validation-engine.md](docs/phases/phase-4.4-file-content-validation-engine.md) | File Content Validation (Phase 4.4) |
-| [docs/phases/phase-4.5.1-managed-execution-architecture.md](docs/phases/phase-4.5.1-managed-execution-architecture.md) | Managed Execution & Request Builder (Phase 4.5.1) |
+| [`docs/PATHHUNTER_MASTER_DOCUMENTATION.md`](docs/PATHHUNTER_MASTER_DOCUMENTATION.md) | **Canonical** architecture, features, tests, roadmap, history |
+| [`CHANGELOG.md`](CHANGELOG.md) | Concise version history |
+| [`NOTICE`](NOTICE) / [`LICENSE`](LICENSE) | GPL-3.0 provenance and license |
 
-Regression harness sources: `tools/smoke/` (`Smoke`, `AbsolutePathSmoke`, `UrlEncodingSmoke`, `FileUploadAnalyzerSmoke`, `FilenameTestingSmoke`, `MimeValidationSmoke`, `FileContentValidationSmoke`, `ManagedRequestBuilderSmoke`, LoadCheck, ProveBlock, ScanLikeBurp).
+Supplemental historical notes (non-canonical if they conflict with the master doc): `docs/burp-loading-fix.md`, `docs/identity-audit.md`, `docs/github-fork-detachment.md`.
+
+Regression harness: `tools/smoke/` (`Smoke`, `AbsolutePathSmoke`, `UrlEncodingSmoke`, `FileUploadAnalyzerSmoke`, `FilenameTestingSmoke`, `MimeValidationSmoke`, `FileContentValidationSmoke`, `ManagedRequestBuilderSmoke`, `LoadCheck`, `ProveBlock`, `ScanLikeBurp`).
 
 ---
 

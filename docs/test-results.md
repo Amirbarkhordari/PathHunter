@@ -1,8 +1,34 @@
+> **Canonical documentation:** [PATHHUNTER_MASTER_DOCUMENTATION.md](PATHHUNTER_MASTER_DOCUMENTATION.md).
+> This file is supplemental/historical. Prefer the master document if details differ.
+
 # Test results
 
 No JUnit suite exists in the repository. PHP and Perl are not installed, so fixtures under `test_cases/` and `perl/` were not executed. No request was sent to an external host. Burp GUI Extender load was **not** opened in automation.
 
 Harness sources: `tools/smoke/` (`LoadCheck`, `ProveBlock`, `ScanLikeBurp`, `Smoke`, `AbsolutePathSmoke`, `UrlEncodingSmoke`, `FileUploadAnalyzerSmoke`, `FilenameTestingSmoke`, `MimeValidationSmoke`, `FileContentValidationSmoke`, `ManagedRequestBuilderSmoke`).
+
+Canonical narrative: [PATHHUNTER_MASTER_DOCUMENTATION.md](PATHHUNTER_MASTER_DOCUMENTATION.md) §9.
+
+---
+
+## Documentation consolidation re-run — 2026-11-14
+
+Docs-only change; application sources unchanged. Suites re-executed against existing `dist/PathHunter.jar` / compiled classes:
+
+| Suite | Result |
+| --- | --- |
+| Smoke | **29 pass / 0 fail** |
+| AbsolutePathSmoke | **33/33** |
+| UrlEncodingSmoke | **31/31** |
+| FileUploadAnalyzerSmoke | **80/80** (+2 SKIP) |
+| FilenameTestingSmoke | **80/80** (+2 SKIP) |
+| MimeValidationSmoke | **78/78** (+2 SKIP) |
+| FileContentValidationSmoke | **91/91** (+2 SKIP) |
+| ManagedRequestBuilderSmoke | **73/73** (+2 SKIP) |
+| LoadCheck | **11/11** |
+| ProveBlock | Pass |
+| ScanLikeBurp | 1 candidate |
+| `tools/docs/validate-master-docs.ps1` | **29 pass / 0 fail** |
 
 ---
 

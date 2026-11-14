@@ -1,3 +1,6 @@
+> **Canonical documentation:** [PATHHUNTER_MASTER_DOCUMENTATION.md](PATHHUNTER_MASTER_DOCUMENTATION.md).
+> This file is supplemental/historical. Prefer the master document if details differ.
+
 # PathHunter project overview
 
 PathHunter is an independently maintained Burp Suite extension for path traversal, LFI, and file-upload path testing. Maintainer: **Amir Barkhordari**. License: **GPL-3.0**.

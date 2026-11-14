@@ -1,3 +1,6 @@
+> **Canonical documentation:** [PATHHUNTER_MASTER_DOCUMENTATION.md](PATHHUNTER_MASTER_DOCUMENTATION.md).
+> This file is supplemental/historical. Prefer the master document if details differ.
+
 # PathHunter feature inventory
 
 Status comes from the current Java sources and from the smoke harness in `build/smoke/results.txt`. Only features that exist in source (and, where noted, harness output) are marked Implemented / Partial / Payload only. Planned PathHunter roadmap items are **not** listed here as implemented.

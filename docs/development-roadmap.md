@@ -1,3 +1,6 @@
+> **Canonical documentation:** [PATHHUNTER_MASTER_DOCUMENTATION.md](PATHHUNTER_MASTER_DOCUMENTATION.md).
+> This file is supplemental/historical. Prefer the master document if details differ.
+
 # PathHunter development roadmap
 
 Recommendations for later phases. Items marked **planned** are not implemented. Work should stay on the legacy `IBurpExtender` API until a Montoya migration is explicitly approved.
