@@ -141,7 +141,7 @@ All extension **implementation** sources live under `Java/src/uk/co/pentest/` wi
 
 ### File Upload module (Phase 4.1)
 
-Passive analysis lives in `package uk.co.pentest.psychoPATH.fileupload` under `Java/src/uk/co/pentest/fileupload/`. `Menu` hands selected request bytes to `PsychoPanel2.sendToFileUploadAnalyzer` → `FileUploadPanel` → `FileUploadRequestAnalyzer`. Path Traversal engines are unchanged. Active managed upload testing is deferred; see `docs/phases/phase-4.1-file-upload-request-analyzer.md`.
+Passive analysis lives in `package uk.co.pentest.psychoPATH.fileupload` under `Java/src/uk/co/pentest/fileupload/`. `Menu` hands selected request bytes to `PsychoPanel2.sendToFileUploadAnalyzer` → `FileUploadPanel` → `FileUploadRequestAnalyzer`. Phase 4.2 adds `FilenameTestingEngine` for filename/extension analysis and structured test-plan generation (`NOT_EXECUTED`). Path Traversal engines are unchanged. Active managed upload execution is deferred; see `docs/phases/phase-4.1-file-upload-request-analyzer.md` and `docs/phases/phase-4.2-filename-extension-testing-engine.md`.
 
 ## Error handling
 

@@ -46,6 +46,7 @@ The following are present in the current sources and have been exercised by the 
 | LFI / arbitrary file read mode | Implemented | Default LFI mode on; scanner match rules for common file signatures |
 | Active Scanner LFI check | Implemented | Gated by “Enable Scanner checks”; not run against remote hosts in automation |
 | File Upload Request Analyzer | Implemented | Passive multipart/binary analysis, signatures, File Upload tab, context-menu handoff (no active uploads) |
+| Filename & Extension Testing | Implemented | Filename analysis, extension strategies, structured test plans (`NOT_EXECUTED`); no HTTP execution |
 | File-upload path scenarios | Payload only | Intruder-driven; covers in-root / out-of-root / no-traversal discovery patterns |
 | Document-root lists (nix / Windows / app servers) | Implemented | Built-in lists; `{TARGET}` substitution (with known edge cases) |
 | Directory checker | Partial | Driven from site-map–derived suffixes; UI list wiring has known gaps |
@@ -110,8 +111,8 @@ Burp Suite (legacy Extender API)
 
 The items below are **planned**, not implemented.
 
-- Phase 4.2 – Filename & Extension Testing Engine
-- Managed File Upload Testing (planner / executor / response analysis)
+- Phase 4.3 – MIME Validation Testing Engine
+- Managed File Upload Testing (executor / response analysis / evidence)
 - Advanced Path Traversal Payload Engine (further variants beyond absolute paths)
 - Advanced Encoding and Traversal Variants
 - Linux and Windows Path Strategies (hardening and completeness)
@@ -153,8 +154,9 @@ Contributions should preserve GPL-3.0, keep copyright / `@author` notices on inh
 | [docs/phases/phase-2.1-absolute-path-engine.md](docs/phases/phase-2.1-absolute-path-engine.md) | Absolute path engine (Phase 2.1) |
 | [docs/phases/phase-2.2-url-encoding-engine.md](docs/phases/phase-2.2-url-encoding-engine.md) | URL encoding engine (Phase 2.2) |
 | [docs/phases/phase-4.1-file-upload-request-analyzer.md](docs/phases/phase-4.1-file-upload-request-analyzer.md) | File Upload Request Analyzer (Phase 4.1) |
+| [docs/phases/phase-4.2-filename-extension-testing-engine.md](docs/phases/phase-4.2-filename-extension-testing-engine.md) | Filename & Extension Testing (Phase 4.2) |
 
-Regression harness sources: `tools/smoke/` (`Smoke`, `AbsolutePathSmoke`, `UrlEncodingSmoke`, `FileUploadAnalyzerSmoke`, LoadCheck, ProveBlock, ScanLikeBurp).
+Regression harness sources: `tools/smoke/` (`Smoke`, `AbsolutePathSmoke`, `UrlEncodingSmoke`, `FileUploadAnalyzerSmoke`, `FilenameTestingSmoke`, LoadCheck, ProveBlock, ScanLikeBurp).
 
 ---
 

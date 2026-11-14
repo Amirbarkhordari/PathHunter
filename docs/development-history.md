@@ -70,6 +70,14 @@ Chronological record of PathHunter’s establishment as an independently identif
 - PortSwigger file-upload labs and Burp desktop GUI verification: NOT RUN.
 - Details: `docs/phases/phase-4.1-file-upload-request-analyzer.md`.
 
+## Phase 4.2 — Filename & Extension Testing Engine (2026-11-14)
+
+- Added `FilenameTestingEngine` / analyzer / variant generator / config; extended test case/plan models.
+- File Upload → Filename Testing GUI for strategy selection and plan preview (`NOT_EXECUTED`).
+- FilenameTestingSmoke 80/80 (+2 SKIP); Phase 4.1 and path-traversal regressions intact.
+- PortSwigger labs and Burp GUI: NOT RUN.
+- Details: `docs/phases/phase-4.2-filename-extension-testing-engine.md`.
+
 ## License continuity
 
 Throughout all phases: GPL-3.0 (`LICENSE`), original authorship attribution preserved in `NOTICE` and inherited source headers. Public marketing text does not replace those legal obligations.

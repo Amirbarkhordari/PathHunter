@@ -6,8 +6,39 @@ All notable changes to PathHunter are documented in this file.
 
 ### Planned
 
-- Phase 4.2 – Filename & Extension Testing Engine (not started)
+- Phase 4.3 – MIME Validation Testing Engine (not started)
 - Further path-traversal engine enhancements (see README roadmap)
+
+## [0.5.0] – 2026-11-14
+
+### Added
+
+- **Filename & Extension Testing Engine** (`FilenameTestingEngine`, `FilenameAnalyzer`, `FilenameVariantGenerator`).
+- Strategies: multiple extensions, case variants, trailing characters, encoding, whitespace/special, filename parameters, path-separator indicators.
+- Configurable allowed/denied/custom extension lists with candidate limits and deterministic deduplication.
+- Extended `UploadTestCase` / `UploadTestPlan` for structured planning (`NOT_EXECUTED`).
+- File Upload → **Filename Testing** GUI sub-tab (generate/select/deselect; no Execute).
+- `tools/smoke/FilenameTestingSmoke.java` (80 pass / 2 skipped).
+- Phase write-up: `docs/phases/phase-4.2-filename-extension-testing-engine.md`.
+
+### Not in this release
+
+- Managed HTTP execution, MIME/content testing, polyglots, response-based verification.
+
+### Tests
+
+| Check | Result |
+| --- | --- |
+| FilenameTestingSmoke | 80/80 (+2 SKIP) |
+| FileUploadAnalyzerSmoke | 80/80 (+2 SKIP) |
+| UrlEncodingSmoke | 31/31 |
+| AbsolutePathSmoke | 33/33 |
+| Smoke | 29/29 |
+| LoadCheck | 11/11 |
+| ProveBlock | Pass |
+| ScanLikeBurp | 1 candidate |
+
+PortSwigger file-upload labs: documented manual procedure only; not executed here.
 
 ## [0.4.0] – 2026-11-14
 
