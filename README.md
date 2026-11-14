@@ -36,8 +36,9 @@ Authorized assessments only (including systems you own and PortSwigger Academy l
 | URL encoding bypass payloads | Implemented | Opt-in URL Encoding tab (off by default) |
 | Active Scanner LFI check | Implemented | Optional; not run against remotes in automation |
 | File Upload Analyzer | Implemented | Passive multipart/binary analysis |
-| Filename / MIME / Content testing | Implemented | Structured plans (`NOT_EXECUTED`); no HTTP send |
-| Managed request preparation | Implemented | In-memory multipart rebuild only; no HTTP send |
+| Filename / MIME / Content testing | Implemented | Structured plans; preparation does not send |
+| Managed prepare + controlled execute | Implemented | Auth-gated Burp send; disabled by default |
+| Response analysis / evidence / reports | Implemented | Behavioral analysis; JSON/HTML export |
 | Directory checker / encodings / byte gen | Partial | See master docs — known limitations |
 
 Details, architecture, and limitations: [`docs/PATHHUNTER_MASTER_DOCUMENTATION.md`](docs/PATHHUNTER_MASTER_DOCUMENTATION.md).
@@ -60,9 +61,12 @@ Rebuild: see master documentation §3 (Installation and Configuration). Prefer `
 ## Basic usage
 
 1. Configure Path Traversal / Absolute Paths / URL Encoding in the PathHunter tab; use Intruder **Path traversal** as needed.
-2. For uploads: send a request via context menu **Send to PathHunter File Upload Analyzer**, or paste raw HTTP into the File Upload Analyzer.
-3. Generate Filename / MIME / Content plans; review candidates (`NOT_EXECUTED`).
-4. Managed Testing: load selected cases → validate → **prepare** requests in memory. **No HTTP is sent** until a future Phase 4.5.2 executor exists.
+2. For uploads: prefer context menu **Send to PathHunter File Upload Analyzer** (keeps target service + baseline response).
+3. Generate Filename / MIME / Content plans; review candidates.
+4. Managed Testing: Load → Validate → **Prepare** (in memory, never sends).
+5. Enable execution, **Authorize Target**, confirm, then **Execute Selected Prepared** (second confirmation). Review **Results** and export JSON/HTML if needed.
+
+Preparation never transmits HTTP. Execution is disabled by default and requires explicit authorization.
 
 ---
 
@@ -78,10 +82,9 @@ Rebuild: see master documentation §3 (Installation and Configuration). Prefer `
 
 ## Roadmap (planned — not implemented)
 
-- Phase 4.5.2 – Controlled HTTP Execution Engine
-- Response analysis and evidence reporting
 - Further path / encoding / LFI / UI hardening
 - Defect fixes documented in the master document
+- Manual Burp / PortSwigger Academy validation of File Upload execution
 
 ---
 

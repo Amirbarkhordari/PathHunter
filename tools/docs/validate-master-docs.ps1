@@ -43,8 +43,9 @@ Check 'master-has-limitations' ($masterText -match '## 12\. Known Limitations') 
 Check 'master-has-workflow' ($masterText -match '## 13\. Contribution') '§13'
 
 Check 'phase-451-not-marked-http' (-not ($masterText -match '(?i)Phase 4\.5\.1[^\n]{0,80}sends HTTP')) '4.5.1 no HTTP claim'
-Check 'phase-452-planned' ($masterText -match '4\.5\.2' -and $masterText -match 'NOT IMPLEMENTED') '4.5.2 planned'
-Check 'commit-ref-present' ($masterText -match 'a4ebc82') 'latest commit referenced'
+Check 'phase-452-implemented' ($masterText -match '4\.5\.2' -and $masterText -match 'Controlled HTTP Execution' -and $masterText -match '`IMPLEMENTED`') '4.5.2 implemented'
+Check 'phase-453-implemented' ($masterText -match '4\.5\.3' -and $masterText -match 'Response Analysis') '4.5.3 documented'
+Check 'commit-ref-present' ($masterText -match 'a4ebc82') '4.5.1 commit referenced'
 
 # No remaining phase-specific docs
 $phaseFiles = @()

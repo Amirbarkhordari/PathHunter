@@ -6,8 +6,50 @@ All notable changes to PathHunter are documented in this file.
 
 ### Planned
 
-- Phase 4.5.2 – Controlled HTTP Execution Engine (not started)
 - Further path-traversal engine enhancements (see master documentation roadmap)
+- Manual Burp / PortSwigger Academy validation of File Upload execution workflow
+
+## [0.9.0] – 2026-11-14
+
+### Added
+
+- **Phase 4.5.2** Controlled HTTP Execution (`ControlledHttpExecutor`, `BurpHttpTransport`, `HttpServiceTarget`).
+- Explicit authorization policy gates (disabled by default; host/port match; batch limits; inter-request delay; cancel; duplicate-prep block).
+- **Phase 4.5.3** Response analysis (`ResponseAnalysisEngine`, baseline comparison, behavior indicators, confidence labels).
+- **Phase 4.5.4** Evidence store, Results dashboard, JSON/HTML report export.
+- Context-menu handoff retains `IHttpService` and baseline response bytes.
+- `tools/smoke/ControlledExecutionSmoke.java` (51 pass / 2 skipped; mocked transport only).
+
+### Changed
+
+- File Upload Managed Testing GUI: Authorize / Execute / Results workflow.
+- Master documentation updated for completed Phase 4.5 (no per-phase docs created).
+
+### Security
+
+- Preparation still never transmits HTTP.
+- Execution requires Enable + Authorize Target + confirmation dialog.
+- Sensitive headers redacted in previews/reports.
+- Behavioral observations are not automatic vulnerability confirmations.
+
+### Tests
+
+| Check | Result |
+| --- | --- |
+| ControlledExecutionSmoke | 51/51 (+2 SKIP) |
+| ManagedRequestBuilderSmoke | 73/73 (+2 SKIP) |
+| FileContentValidationSmoke | 91/91 (+2 SKIP) |
+| MimeValidationSmoke | 78/78 (+2 SKIP) |
+| FilenameTestingSmoke | 80/80 (+2 SKIP) |
+| FileUploadAnalyzerSmoke | 80/80 (+2 SKIP) |
+| UrlEncodingSmoke | 31/31 |
+| AbsolutePathSmoke | 33/33 |
+| Smoke | 29/29 |
+| LoadCheck | 11/11 |
+| ProveBlock | Pass |
+| ScanLikeBurp | 1 candidate |
+| JAR major version | 52 |
+| Bundled `burp/` API classes | 0 |
 
 ## [0.8.1] – 2026-11-14
 

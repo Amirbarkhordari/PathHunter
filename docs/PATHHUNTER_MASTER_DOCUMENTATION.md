@@ -11,8 +11,8 @@ Update this file whenever features, architecture, tests, build, or roadmap chang
 | Maintainer | Amir Barkhordari |
 | License | GPL-3.0 (`LICENSE`; provenance in `NOTICE`) |
 | Primary branch | `master` |
-| Current phase | **4.5.1** — Managed Execution Architecture & Multipart Request Builder |
-| Latest documented commit | `a4ebc82bb0ade9ec3c5849c9068f4c915243b9e0` |
+| Current phase | **4.5** complete — Managed prepare (4.5.1), controlled HTTP (4.5.2), response analysis (4.5.3), evidence/results (4.5.4) |
+| Latest documented feature commit | see [§11](#11-development-history) (Phase 4.5) |
 | Entry class | `uk.co.pentest.psychoPATH.BurpExtender` |
 | Distribution artifact | `dist/PathHunter.jar` |
 | Document status | Living master (supersedes former per-phase docs directory) |
@@ -59,10 +59,11 @@ Web application security testers and penetration testers working in authorized s
 | --- | --- |
 | Path traversal / LFI Intruder generators | `IMPLEMENTED` |
 | Absolute path & URL-encoding engines | `IMPLEMENTED` (opt-in; labs `NOT VERIFIED`) |
-| File Upload Analyzer + Filename / MIME / Content planners | `IMPLEMENTED` (planning only; no HTTP send) |
-| Managed request preparation (4.5.1) | `IMPLEMENTED` (in-memory only) |
-| Managed HTTP execution (4.5.2) | `PLANNED` / `NOT IMPLEMENTED` |
-| Response analysis / evidence (4.5.3–4.5.4) | `PLANNED` / `NOT IMPLEMENTED` |
+| File Upload Analyzer + Filename / MIME / Content planners | `IMPLEMENTED` |
+| Managed request preparation (4.5.1) | `IMPLEMENTED` (in-memory; never transmits) |
+| Controlled HTTP execution (4.5.2) | `IMPLEMENTED` (explicit auth; Burp `makeHttpRequest`) |
+| Response analysis (4.5.3) | `IMPLEMENTED` (behavioral; not auto-vuln severity) |
+| Evidence / results / report export (4.5.4) | `IMPLEMENTED` |
 | Burp desktop GUI load of current JAR | `NOT VERIFIED` in automation |
 | PortSwigger Academy live labs | `NOT VERIFIED` in automation |
 
@@ -93,7 +94,9 @@ flowchart TD
   A43[MimeValidationEngine]
   A44[FileContentValidationEngine]
   A451[ManagedExecutionManager / MultipartRequestBuilder]
-  Future452[Phase 4.5.2 HTTP send - NOT IMPLEMENTED]
+  A452[ControlledHttpExecutor]
+  A453[ResponseAnalysisEngine]
+  A454[EvidenceStore / ReportExporter]
 
   Burp --> Ext
   Ext --> Tab
@@ -108,7 +111,7 @@ flowchart TD
   A42 --> A451
   A43 --> A451
   A44 --> A451
-  A451 -.-> Future452
+  A451 --> A452 --> A453 --> A454
 ```
 
 ### Package layout
@@ -308,15 +311,19 @@ Strategies: truncated, required marker, signature alteration, length boundary, m
 
 ### 5.5 Managed Testing / Request Builder (Phase 4.5.1) — `IMPLEMENTED` (prepare only)
 
-See [§7](#7-managed-execution-architecture). **Does not send HTTP.**
+See [§7](#7-managed-execution-architecture). **Preparation never transmits HTTP.**
 
-### 5.6 Future Response Analysis & Evidence — `PLANNED`
+### 5.6 Controlled HTTP Execution (Phase 4.5.2) — `IMPLEMENTED`
 
-| Phase | Scope | Status |
-| --- | --- | --- |
-| 4.5.2 | Controlled HTTP Execution Engine | `NOT IMPLEMENTED` |
-| 4.5.3 | Response Analysis Engine | `NOT IMPLEMENTED` |
-| 4.5.4 | Evidence Collection & Test Results | `NOT IMPLEMENTED` |
+`ControlledHttpExecutor` sends prepared artifacts through `HttpTransport` (`BurpHttpTransport` → `callbacks.makeHttpRequest`). Defaults disabled; requires Enable + Authorize Target + Execute confirmation. Target host must match analyzed/authorized host. Batch limits and inter-request delays enforced. Duplicate preparation IDs blocked. Cancellation honored between cases. HTTP/2 still rejected.
+
+### 5.7 Response Analysis (Phase 4.5.3) — `IMPLEMENTED`
+
+Package `fileupload.response`: `ResponseSnapshot`, `ResponseNormalizer`, `ResponseAnalysisEngine`. Compares baseline vs observed responses; emits `BehaviorIndicator` values and `AnalysisConfidence` (`CONFIRMED_BEHAVIOR`, `POSSIBLE_SECURITY_ISSUE`, `INCONCLUSIVE`, `REJECTED`, `ERROR`). HTTP 200 / acceptance text is **not** treated as storage or RCE proof.
+
+### 5.8 Evidence, Results & Reporting (Phase 4.5.4) — `IMPLEMENTED`
+
+Package `fileupload.evidence`: `EvidenceStore`, `EvidenceRecord`, `UploadTestCaseResult`, `AssessmentReport`, `ReportExporter` (JSON + HTML with redaction). File Upload → **Results** tab filters/inspects evidence and exports reports.
 
 ---
 
@@ -357,39 +364,43 @@ Generated planner cases remain **`NOT_EXECUTED`**. Preparation (4.5.1) must **no
 
 ## 7. Managed Execution Architecture
 
-Package: `uk.co.pentest.psychoPATH.fileupload.execution`
+Package: `uk.co.pentest.psychoPATH.fileupload.execution` (+ `response`, `evidence`)
 
 | Component | Responsibility | Status |
 | --- | --- | --- |
 | `ManagedExecutionManager` | Validate/prepare batches; never sends | `IMPLEMENTED` |
+| `ControlledHttpExecutor` | Authorized send via `HttpTransport` | `IMPLEMENTED` |
+| `BurpHttpTransport` / `RecordingHttpTransport` | Burp send / test double | `IMPLEMENTED` |
+| `HttpServiceTarget` | Host/port/https without Burp types | `IMPLEMENTED` |
 | `ExecutionStateManager` | Lifecycle transitions | `IMPLEMENTED` |
 | `MultipartRequestBuilder` | One-target multipart rebuild | `IMPLEMENTED` |
-| `HttpRequestFrame` | HTTP/1.x split/rebuild; reject HTTP/2 pseudo-headers | `IMPLEMENTED` |
+| `HttpRequestFrame` | HTTP/1.x split/rebuild; reject HTTP/2 | `IMPLEMENTED` |
 | `CandidateContentStore` | Hash+length verified candidate bytes | `IMPLEMENTED` |
-| `ExecutionAuthorizationPolicy` | Defaults **disabled**; foundation for 4.5.2 | `IMPLEMENTED` (policy only) |
+| `ExecutionAuthorizationPolicy` | Defaults **disabled**; host/confirm/batch/delay | `IMPLEMENTED` |
 | `SensitiveHeaderRedactor` | Cookie / Authorization / CSRF redaction | `IMPLEMENTED` |
 | `PreparedRequestArtifact` / `RequestDiff` | Immutable prepared request + safe diff | `IMPLEMENTED` |
-| `ManagedExecutionContext` / `ManagedExecutionResult` | Per-case / batch outcomes | `IMPLEMENTED` |
+| `ResponseAnalysisEngine` | Baseline vs observed behavioral analysis | `IMPLEMENTED` |
+| `EvidenceStore` / `ReportExporter` | Evidence + JSON/HTML reports | `IMPLEMENTED` |
 
-### Lifecycle (preparation)
+### Lifecycle
 
-`NOT_EXECUTED` → `SELECTED` → `VALIDATING` → `READY_FOR_EXECUTION` | `PREPARATION_FAILED` | `CANCELLED`
+Preparation: `NOT_EXECUTED` → `SELECTED` → `VALIDATING` → `READY_FOR_EXECUTION` | `PREPARATION_FAILED` | `CANCELLED`
 
-Successful prepare → **`READY_FOR_EXECUTION`**. Never mark `EXECUTED` in 4.5.1.
+Execution: `READY_FOR_EXECUTION` → `EXECUTION_PENDING` → `EXECUTING` → `EXECUTED` | `FAILED` | `CANCELLED` | `REJECTED`
+
+Successful prepare → **`READY_FOR_EXECUTION`** and case status stays **`NOT_EXECUTED`**. Only a successful send sets `EXECUTED` / `COMPLETED`.
 
 ### Target isolation
 
-Exactly one of:
+Exactly one of: filename · part Content-Type · part body bytes. Unrelated parts preserved; Content-Length recalculated.
 
-1. Filename (Content-Disposition `filename`)
-2. Part Content-Type (or remove if missing sentinel)
-3. Part body bytes (verified artifact)
+### GUI workflow
 
-Unrelated parts/headers preserved; Content-Length recalculated; Transfer-Encoding chunked not preserved after rewrite.
-
-### GUI
-
-File Upload → **Managed Testing**: load selected cases from Filename/MIME/Content plans → validate → prepare → redacted preview + diff. **No Execute button.**
+1. Context menu **Send to PathHunter File Upload Analyzer** (retains `IHttpService` + baseline response when available)
+2. Analyze → generate Filename / MIME / Content plans
+3. Managed Testing: Load → Validate → Prepare (in memory)
+4. Authorize Target (Enable + confirmation) → Execute Selected Prepared (second confirm dialog)
+5. Results tab: filter, inspect evidence, export JSON/HTML
 
 ---
 
@@ -400,11 +411,11 @@ File Upload → **Managed Testing**: load selected cases from Filename/MIME/Cont
 | Original request preservation | Defensive clones; SHA-256 before/after prepare |
 | Part content immutability | `UploadPart.getContent()` clones; content candidates copy-only |
 | Target isolation | Reject multi-target / bad hash / missing artifact / bad part index |
-| Authorization | Policy default disabled; host/port/method/path/size/batch gates for **future** send |
-| Sensitive data | Do not log Cookie / Authorization / CSRF; GUI redaction |
+| Authorization | Policy default disabled; Enable + Authorize Target + Execute confirmation; host/port/method/path/size/batch/delay gates |
+| Sensitive data | Do not log Cookie / Authorization / CSRF; GUI/report redaction |
 | Multipart | Byte-safe rebuild; reject unsafe HTTP/2 forms rather than silent downgrade |
-| No webshells / polyglots / auto-upload | Enforced by scope of generators and absence of HTTP client in 4.5.1 |
-| Resource limits | Body/part/candidate/aggregate caps in parsers and content config |
+| No webshells / polyglots / auto-crawl | Enforced by generator scope and auth-gated executor |
+| Resource limits | Body/part/candidate/aggregate caps; execution batch/delay limits |
 
 Structural or metadata inconsistency is **not** a confirmed vulnerability.
 
@@ -423,12 +434,13 @@ Structural or metadata inconsistency is **not** a confirmed vulnerability.
 | `FilenameTestingSmoke` | Phase 4.2 | **80/80** (+2 SKIP) |
 | `MimeValidationSmoke` | Phase 4.3 | **78/78** (+2 SKIP) |
 | `FileContentValidationSmoke` | Phase 4.4 | **91/91** (+2 SKIP) |
-| `ManagedRequestBuilderSmoke` | Phase 4.5.1 | **73/73** (+2 SKIP) |
+| `ManagedRequestBuilderSmoke` | Phase 4.5.1 prepare | **73/73** (+2 SKIP) |
+| `ControlledExecutionSmoke` | Phase 4.5.2–4.5.4 (mocked HTTP) | **51/51** (+2 SKIP) |
 | `LoadCheck` | JAR / Extender load simulation | **11/11** |
 | `ProveBlock` | Burp loader assignability | Pass |
 | `ScanLikeBurp` | Extender discovery | 1 candidate |
 
-\*Results as of feature commit `a4ebc82` (Phase 4.5.1). Re-verified unchanged during documentation consolidation (2026-11-14). Re-run after code changes; never invent results.
+\*Results re-executed 2026-11-14 after Phase 4.5 completion. Automation uses `RecordingHttpTransport` only — never contacts external hosts. Re-run after code changes; never invent results.
 
 ### Skipped / not run (typical)
 
@@ -441,8 +453,8 @@ Structural or metadata inconsistency is **not** a confirmed vulnerability.
 1. Load `dist/PathHunter.jar` in an authorized Burp + Academy session.
 2. Capture relevant request → Intruder (path labs) or File Upload Analyzer (upload labs).
 3. Enable Absolute / URL Encoding or generate Filename/MIME/Content plans as applicable.
-4. For managed prepare: select cases → prepare → inspect redacted preview (still no auto-send until 4.5.2).
-5. Do **not** claim a lab solved from candidate generation alone.
+4. Managed prepare → authorize target → execute selected prepared cases (explicit confirmations).
+5. Review Results / evidence; do **not** claim a lab solved from HTTP 200 or acceptance text alone.
 
 ### Build verification checklist
 
@@ -463,21 +475,22 @@ Compile `--release 8` · JAR contains new classes · no `burp/` bundled · `java
 | 4.2 | Filename & Extension Testing | Complete (planning; GUI/lab `NOT VERIFIED`) |
 | 4.3 | MIME Validation Testing | Complete (planning; GUI/lab `NOT VERIFIED`) |
 | 4.4 | File Content Validation | Complete (planning; GUI/lab `NOT VERIFIED`) |
-| 4.5.1 | Managed Execution & Multipart Request Builder | Complete (no HTTP; GUI `NOT VERIFIED`) |
+| 4.5.1 | Managed Execution & Multipart Request Builder | Complete (prepare only) |
+| 4.5.2 | Controlled HTTP Execution Engine | Complete (auth-gated; GUI `NOT VERIFIED`) |
+| 4.5.3 | Response Analysis Engine | Complete (behavioral; labs `NOT VERIFIED`) |
+| 4.5.4 | Evidence Collection & Results Reporting | Complete (export; GUI `NOT VERIFIED`) |
 
 ### Current
 
-**Phase 4.5.1** is the latest implemented upload-execution foundation. Next approved work should be **4.5.2** only after explicit approval.
+**Phase 4.5** (4.5.1–4.5.4) is complete in code. Manual Burp desktop and PortSwigger Academy validation remain `NOT VERIFIED`.
 
 ### Planned
 
-- **4.5.2** Controlled HTTP Execution Engine (authorization, bounded send, timeouts)
-- **4.5.3** Response Analysis Engine
-- **4.5.4** Evidence Collection & Test Results
 - Further path-traversal / encoding / LFI / UI hardening
 - Defect fixes listed in [§12](#12-known-limitations)
 - Repeatable build scripting (without pretending NetBeans Ant tree exists)
 - Montoya migration only if explicitly approved
+- Phase 4.6+ only after explicit approval
 
 ### Dependencies
 
@@ -503,6 +516,7 @@ Concise milestones (see `CHANGELOG.md` for release notes).
 | 2026-11-14 | Phase 4.4 Content | `9ba4308` | FileContentValidationSmoke 91/91 |
 | 2026-11-14 | Phase 4.5.1 Managed prepare | `a4ebc82` | ManagedRequestBuilderSmoke 73/73; JAR ~336 KiB |
 | 2026-11-14 | Docs consolidation | `d7c5513` | Single master document; phase MD files removed; `tools/docs/validate-master-docs.ps1` |
+| 2026-11-14 | Phase 4.5.2–4.5.4 execute/analyze/evidence | *(this release)* | ControlledExecutionSmoke 51/51; JAR ~397 KiB |
 
 ---
 
@@ -533,10 +547,12 @@ Concise milestones (see `CHANGELOG.md` for release notes).
 
 ### File Upload / managed execution
 
-- No HTTP send (4.5.2 `NOT IMPLEMENTED`)
+- HTTP send requires explicit authorization (disabled by default)
+- Paste-only analyzer path may lack `IHttpService` / baseline response until context-menu handoff
 - HTTP/2 reconstruction unsupported (rejected)
-- No response analysis / evidence / confirmed findings from prepare
+- Behavioral analysis is not automatic vulnerability confirmation or severity scoring
 - No webshell/polyglot generation (intentional)
+- No automatic retries; no unbounded crawling
 - Academy / Burp GUI for upload tabs: `NOT VERIFIED`
 
 ### Scanner
