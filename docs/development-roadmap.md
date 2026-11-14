@@ -11,14 +11,15 @@ PathHunter is GPL-3.0. Later changes must keep that license, original copyright 
 | 0 | Inspect, rebuild, document, smoke harness | Complete (committed in Phase 1.1) |
 | 0.1 | Load fix (non-`burp` package), `dist/PathHunter.jar`, PathHunter UI name | Complete (committed in Phase 1.1) |
 | 1 | Independent branding, docs, attribution, fork-detach guidance | Complete (committed in Phase 1.1) |
-| 1.1 | GitHub description/topics, tests, commit, push; Leave fork network | Description/topics/tests/commit/push done; **Leave fork network still manual** |
+| 1.1 | GitHub description/topics, tests, commit, push; Leave fork network | Complete (`fork: false` verified) |
+| 1.2 | Public branding presentation | Complete |
+| 2.1 | Absolute Path Payload Engine | Complete (lab manual procedure only) |
 
-## Planned product directions (Phase 1+; not implemented)
+## Planned product directions (not implemented)
 
 Clearly marked as future work in the README:
 
-- Advanced Path Traversal Payload Engine
-- Absolute Path Testing
+- Advanced Path Traversal Payload Engine (further techniques beyond absolute paths)
 - Advanced Encoding and Traversal Variants
 - Linux and Windows Path Strategies (completeness / hardening)
 - Improved LFI detection

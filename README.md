@@ -41,6 +41,7 @@ The following are present in the current sources and have been exercised by the 
 | Area | Status | Notes |
 | --- | --- | --- |
 | Path traversal payload generator | Implemented | Configurable roots, targets, suffixes, traversal depth, evasive patterns |
+| Absolute filesystem path payloads | Implemented | Optional Absolute paths tab; bare paths such as `/etc/passwd` without `../` (off by default) |
 | LFI / arbitrary file read mode | Implemented | Default LFI mode on; scanner match rules for common file signatures |
 | Active Scanner LFI check | Implemented | Gated by “Enable Scanner checks”; not run against remote hosts in automation |
 | File-upload path scenarios | Payload only | Intruder-driven; covers in-root / out-of-root / no-traversal discovery patterns |
@@ -105,8 +106,7 @@ Burp Suite (legacy Extender API)
 
 The items below are **planned**, not implemented.
 
-- Advanced Path Traversal Payload Engine
-- Absolute Path Testing
+- Advanced Path Traversal Payload Engine (further variants beyond absolute paths)
 - Advanced Encoding and Traversal Variants
 - Linux and Windows Path Strategies (hardening and completeness)
 - Improved LFI detection
@@ -144,8 +144,9 @@ Contributions should preserve GPL-3.0, keep copyright / `@author` notices on inh
 | [docs/burp-loading-fix.md](docs/burp-loading-fix.md) | Phase 0.1 load failure analysis |
 | [docs/known-limitations.md](docs/known-limitations.md) | Known defects |
 | [docs/development-roadmap.md](docs/development-roadmap.md) | Planned work |
+| [docs/phases/phase-2.1-absolute-path-engine.md](docs/phases/phase-2.1-absolute-path-engine.md) | Absolute path engine (Phase 2.1) |
 
-Regression harness sources: `tools/smoke/`.
+Regression harness sources: `tools/smoke/` (`Smoke`, `AbsolutePathSmoke`, LoadCheck, ProveBlock, ScanLikeBurp).
 
 ---
 

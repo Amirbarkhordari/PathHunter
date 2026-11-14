@@ -6,7 +6,35 @@ All notable changes to PathHunter are documented in this file.
 
 ### Planned
 
-- Advanced path traversal payload engine and related roadmap items (see README)
+- Further path-traversal engine enhancements beyond absolute paths (see README roadmap)
+
+## [0.2.0] – 2026-11-13
+
+### Added
+
+- **Absolute Path Payload Generation** for the Path Traversal Intruder generator.
+- New **Absolute paths** configuration tab: enable/disable, Linux / Windows / Custom targets, editable path list, validation status.
+- `AbsolutePathEngine` helper for OS-specific validation, encoding, and deduplication.
+- Payload strategy tags: `STANDARD_TRAVERSAL`, `ABSOLUTE_LINUX`, `ABSOLUTE_WINDOWS`, `ABSOLUTE_CUSTOM`.
+- `tools/smoke/AbsolutePathSmoke.java` (33 automated checks).
+- Phase write-up: `docs/phases/phase-2.1-absolute-path-engine.md`.
+
+### Changed
+
+- Absolute path payloads are additive and **disabled by default** so existing traversal/LFI sets are unchanged until enabled.
+- Absolute paths use the existing encoding tables once per enabled encoding (raw / URL / double-URL / UTF variants).
+
+### Tests
+
+| Check | Result |
+| --- | --- |
+| AbsolutePathSmoke | 33/33 |
+| Smoke | 29/29 |
+| LoadCheck | 11/11 |
+| ProveBlock | Pass |
+| ScanLikeBurp | 1 candidate |
+
+PortSwigger Academy lab: documented manual procedure only; not executed in this environment.
 
 ## [0.1.1] – 2026-11-13
 

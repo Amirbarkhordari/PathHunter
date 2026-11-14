@@ -2,11 +2,31 @@
 
 No JUnit suite exists in the repository. PHP and Perl are not installed, so fixtures under `test_cases/` and `perl/` were not executed. No request was sent to an external host. Burp GUI Extender load was **not** opened in automation.
 
-Harness sources: `tools/smoke/` (`LoadCheck`, `ProveBlock`, `ScanLikeBurp`, `Smoke`).
+Harness sources: `tools/smoke/` (`LoadCheck`, `ProveBlock`, `ScanLikeBurp`, `Smoke`, `AbsolutePathSmoke`).
 
 ---
 
-## Phase 1.1 — 2026-11-13 (authoritative for current tree)
+## Phase 2.1 — 2026-11-13 (authoritative for current tree)
+
+**Artifact:** `dist/PathHunter.jar` (85088 bytes after clean rebuild)
+
+| Check | Expected | Actual | Status |
+| --- | --- | --- | --- |
+| Compilation `--release 8` | Exit 0 | Exit 0 | Pass |
+| JAR contains `AbsolutePathEngine` | Present | Present | Pass |
+| Entry `BurpExtender` / no bundled Burp API | Pass | Pass | Pass |
+| AbsolutePathSmoke | All absolute-path cases | **33/33** | Pass |
+| Smoke regression | 29/29 | **29/29** | Pass |
+| LoadCheck | 11/11 | **11/11** | Pass |
+| ProveBlock | Pass | Pass | Pass |
+| ScanLikeBurp | 1 candidate | 1 candidate | Pass |
+| PortSwigger Academy lab | Live solve | Not run | Manual only |
+
+Evidence: `build/absolute-smoke-results.txt`, `build/smoke-results.txt`, `build/loadcheck-results.txt`.
+
+---
+
+## Phase 1.1 — 2026-11-13 (historical)
 
 **Artifact:** `dist/PathHunter.jar` (73631 bytes after clean rebuild)
 

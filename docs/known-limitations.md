@@ -37,6 +37,7 @@ These are properties of the current source. They were not changed in this phase.
 - Windows LFI output contained `..\win.ini` twice in a three-item list (observed).
 - `SimpleDocumentListener` has no callers (source).
 - `addFilePrefix` is never read, so `file:///` prefixes from the TODO are not generated (source).
+- Absolute path payloads (Phase 2.1) are opt-in via the Absolute paths tab. They are not a separate Intruder generator factory; they augment Path traversal when enabled. PortSwigger Academy absolute-path lab success was not verified in automation.
 
 ## Scanner
 

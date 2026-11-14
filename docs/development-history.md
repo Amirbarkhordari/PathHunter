@@ -46,6 +46,14 @@ Chronological record of PathHunter’s establishment as an independently identif
 - Updated identity audit, project overview, changelog, and development history.
 - No Java package/class renames; no license change.
 
+## Phase 2.1 — Absolute Path Payload Engine (2026-11-13)
+
+- Added optional absolute filesystem path generation (`/etc/passwd`, Windows absolute paths, custom list).
+- New Absolute paths UI tab; additive Intruder Path traversal payloads; encoding via existing tables.
+- AbsolutePathSmoke 33/33; Smoke 29/29; LoadCheck / ProveBlock / ScanLikeBurp regression passed.
+- Documented PortSwigger Academy manual validation; lab not executed here.
+- Details: `docs/phases/phase-2.1-absolute-path-engine.md`.
+
 ## License continuity
 
 Throughout all phases: GPL-3.0 (`LICENSE`), original authorship attribution preserved in `NOTICE` and inherited source headers. Public marketing text does not replace those legal obligations.

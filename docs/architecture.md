@@ -2,7 +2,9 @@
 
 PathHunter is a single Burp entry class, a Swing tab, and one payload engine reused by Intruder, by the Save/Copy buttons, and by the active Scanner check. There is no separate service layer, no configuration file, and no database. All options live in `PsychoPanel2` fields and Swing models.
 
-**User-facing brand:** PathHunter. **Technical Java package:** `uk.co.pentest.psychoPATH` (retained from psychoPATH for compatibility; not renamed in Phase 1).
+**User-facing brand:** PathHunter. **Technical Java package:** `uk.co.pentest.psychoPATH` (retained for compatibility; not renamed).
+
+**Absolute paths (Phase 2.1):** When enabled on the Absolute paths tab, `IntruderPayloadGenerator.appendAbsolutePathPayloads` appends validated bare absolute filesystem paths (Linux / Windows / custom) after standard traversal construction and before terminator expansion. Helpers live in `AbsolutePathEngine`. Strategy tags on `psychoPayload` distinguish `STANDARD_TRAVERSAL` from absolute strategies.
 
 ## Diagram
 
