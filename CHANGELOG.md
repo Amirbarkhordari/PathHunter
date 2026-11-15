@@ -9,6 +9,21 @@ All notable changes to PathHunter are documented in this file.
 - Further path-traversal engine enhancements (see master documentation roadmap)
 - Manual Burp / PortSwigger Academy validation of File Upload execution workflow
 
+## [0.9.3] – 2026-11-15
+
+### Fixed
+
+- Clarified that authorization policy `host=-` / `port=-` is the unbound default until **Authorize Target**, not a lost `IHttpService` (detected/bound Burp service shown separately).
+- Authorize Target now binds only the retained Burp service (read-only host/port/protocol); refuses missing service and HTTP/2/3 request messages.
+- Execute rejects authorized/bound service mismatch and prepared Host-header / port mismatches.
+- `HttpRequestFrame` rejects `HTTP/2` and `HTTP/3` request-line tokens (no silent downgrade).
+
+### Added
+
+- Wrapped authorization detail panel; detected target + request version labels.
+- Path-prefix binding from analyzed URL on authorize.
+- `tools/smoke/AuthorizationBindingSmoke.java` (43 pass / 2 skipped).
+
 ## [0.9.2] – 2026-11-15
 
 ### Fixed

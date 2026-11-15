@@ -321,11 +321,15 @@ See [§7](#7-managed-execution-architecture). **Preparation never transmits HTTP
 
 **Candidate transfer:** Generated Filename/MIME/Content cases default to **Sel=checked**. `ManagedExecutionManager.collectSelectedCases` gathers selected **applicable** cases from all three plans (deduped by test ID). Opening the **Managed Testing** tab auto-loads that queue; **Refresh Cases** reloads explicitly. Status shows per-engine counts (`Filename=N MIME=M Content=C`). Empty queues explain missing plans / unchecked Sel / not-applicable cases.
 
-**Layout (2026-11-15 repair):** Authorization panel uses readable `GridBagLayout` fields (host/port/batch/delay/max body). Actions use `FlowLayout` toolbars (not a compressing `GridLayout`) so labels stay horizontal. Case table + detail tabs sit in a horizontal `JSplitPane` with minimum widths; request Validation / Preview / Summary / Diff / Notice are tabbed instead of stacked narrow columns.
+**Layout (2026-11-15 repair):** Authorization panel uses readable `GridBagLayout` fields (host/port/protocol/batch/delay/max body). Actions use `FlowLayout` toolbars (not a compressing `GridLayout`) so labels stay horizontal. Case table + detail tabs sit in a horizontal `JSplitPane` with minimum widths; request Validation / Preview / Summary / Diff / Notice are tabbed instead of stacked narrow columns.
+
+**Service retention & authorization binding:** Context menu `Send to PathHunter File Upload Analyzer` copies request bytes plus `IHttpService` and baseline response into `FileUploadPanel` (`boundServiceTarget` / `sessionTarget`). Plan generation, selection, and Managed load do **not** discard that service. Policy summary `host=-` / `port=-` means **not yet authorized** (expected unbound default) — it is **not** proof that `IHttpService` was lost. Detected/bound service is shown separately from authorized host/port. **Authorize Target** requires Enable + confirmation checkboxes, binds **only** the retained Burp service (read-only host/port/protocol fields), sets a narrow path prefix from the analyzed URL when available, and never invents a target from a Host header alone. Execute requires policy bound + same host/port as the retained service.
 
 ### 5.6 Controlled HTTP Execution (Phase 4.5.2) — `IMPLEMENTED`
 
-`ControlledHttpExecutor` sends prepared artifacts through `HttpTransport` (`BurpHttpTransport` → `callbacks.makeHttpRequest`). Defaults disabled; requires Enable + Authorize Target + Execute confirmation. Target host must match analyzed/authorized host. Batch limits and inter-request delays enforced. Duplicate preparation IDs blocked. Cancellation honored between cases. HTTP/2 still rejected.
+`ControlledHttpExecutor` sends prepared artifacts through `HttpTransport` (`BurpHttpTransport` → `callbacks.makeHttpRequest`). Defaults disabled; requires Enable + Authorize Target + Execute confirmation. Target host/port must match authorized + retained service; prepared `Host` header mismatch is rejected. Batch limits and inter-request delays enforced. Duplicate preparation IDs blocked. Cancellation honored between cases.
+
+**HTTP/2:** **Unsupported** for reconstruction/execution. `HttpRequestFrame` rejects HTTP/2 and HTTP/3 request-line tokens, HTTP/2 preface, and pseudo-headers. Prepare fails with `UNSUPPORTED_TARGET` (no silent downgrade to HTTP/1.1). Burp’s legacy Extender API still uses HTTP/1.x-formatted request bytes with `makeHttpRequest`; PathHunter does not claim HTTP/2 wire support. Convert/re-capture as HTTP/1.1 in Burp before Managed execution when the request line shows `HTTP/2`.
 
 ### 5.7 Response Analysis (Phase 4.5.3) — `IMPLEMENTED`
 
@@ -451,6 +455,7 @@ Structural or metadata inconsistency is **not** a confirmed vulnerability.
 | `ManagedRequestBuilderSmoke` | Phase 4.5.1 prepare | **73/73** (+2 SKIP) |
 | `ControlledExecutionSmoke` | Phase 4.5.2–4.5.4 (mocked HTTP) | **51/51** (+2 SKIP) |
 | `FileUploadWorkflowSmoke` | End-to-end File Upload GUI/engine workflow + Managed transfer/layout | **60/60** (+2 SKIP) |
+| `AuthorizationBindingSmoke` | IHttpService retention, auth binding, HTTP/2 rejection | **43/43** (+2 SKIP) |
 | `LoadCheck` | JAR / Extender load simulation | **11/11** |
 | `ProveBlock` | Burp loader assignability | Pass |
 | `ScanLikeBurp` | Extender discovery | 1 candidate |
@@ -534,6 +539,7 @@ Concise milestones (see `CHANGELOG.md` for release notes).
 | 2026-11-14 | Phase 4.5.2–4.5.4 execute/analyze/evidence | `247b495` | ControlledExecutionSmoke 51/51; JAR ~397 KiB |
 | 2026-11-15 | File Upload functional audit / GUI fixes | `69506fb` | Auto-generate plans; Generate toolbars; FileUploadWorkflowSmoke 31/31 |
 | 2026-11-15 | Managed Testing transfer + layout repair | `79a14a0` | Auto-load on tab; FlowLayout actions; FileUploadWorkflowSmoke 60/60 |
+| 2026-11-15 | Authorization binding + HTTP/2 reject | *(this release)* | Clarify host=-; bind IHttpService; AuthorizationBindingSmoke 43/43 |
 
 ---
 
