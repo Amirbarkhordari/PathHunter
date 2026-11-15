@@ -539,7 +539,7 @@ Concise milestones (see `CHANGELOG.md` for release notes).
 | 2026-11-14 | Phase 4.5.2–4.5.4 execute/analyze/evidence | `247b495` | ControlledExecutionSmoke 51/51; JAR ~397 KiB |
 | 2026-11-15 | File Upload functional audit / GUI fixes | `69506fb` | Auto-generate plans; Generate toolbars; FileUploadWorkflowSmoke 31/31 |
 | 2026-11-15 | Managed Testing transfer + layout repair | `79a14a0` | Auto-load on tab; FlowLayout actions; FileUploadWorkflowSmoke 60/60 |
-| 2026-11-15 | Authorization binding + HTTP/2 reject | *(this release)* | Clarify host=-; bind IHttpService; AuthorizationBindingSmoke 43/43 |
+| 2026-11-15 | Authorization binding + HTTP/2 reject | `db8307a` | Clarify host=-; bind IHttpService; AuthorizationBindingSmoke 43/43 |
 
 ---
 
