@@ -9,6 +9,25 @@ All notable changes to PathHunter are documented in this file.
 - Further path-traversal engine enhancements (see master documentation roadmap)
 - Manual Burp / PortSwigger Academy validation of File Upload execution workflow
 
+## [0.9.1] – 2026-11-15
+
+### Fixed
+
+- File Upload Filename/MIME/Content plan tables no longer remain empty after analysis: auto-select first **file** part and auto-generate plans.
+- Moved **Generate Test Plan** / MIME / Content Generate controls to a prominent toolbar above each plan table (were easy to miss under empty tables).
+- Stopped silently remapping a selected non-file part to the primary file part during generation.
+- Clearing stale plans when the selected file part changes; Managed load explains why 0 cases were loaded.
+- Empty-plan and oversize/unsupported content reasons surfaced in status text.
+- Results export handles missing analysis when evidence exists; Results filter no longer offers misleading `NOT_EXECUTED` evidence rows.
+
+### Added
+
+- `tools/smoke/FileUploadWorkflowSmoke.java` (31 pass / 2 skipped) covering Analyzer→plans→Managed→evidence workflows.
+
+### Changed
+
+- Updated File Upload notices to point at Managed Testing instead of “future phase” wording.
+
 ## [0.9.0] – 2026-11-14
 
 ### Added

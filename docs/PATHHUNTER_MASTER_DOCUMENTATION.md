@@ -286,6 +286,8 @@ Strategies: multiple extensions, case, trailing characters, filename encoding, w
 
 Limits: default max candidates **120** (hard **400**). Cases: `CATEGORY_FILENAME`, `TARGET_FILENAME`, `NOT_EXECUTED`.
 
+**GUI:** Filename Testing tab shows **Generate Test Plan** above the plan table. After Analyzer succeeds, PathHunter auto-selects the first **file** part and auto-generates plans so tables are not left empty. Changing the selected part clears stale plans. Empty plans surface notes in the status line.
+
 ### 5.3 MIME Validation (Phase 4.3) — `IMPLEMENTED` (planning)
 
 `MimeValidationEngine` / `MimeAnalyzer` / `MimeExtensionMapper` / `MimeSignatureComparator` / `MimeVariantGenerator`.
@@ -293,6 +295,8 @@ Limits: default max candidates **120** (hard **400**). Cases: `CATEGORY_FILENAME
 Comparison statuses include `CONSISTENT`, `MIME_EXTENSION_MISMATCH`, `MIME_SIGNATURE_MISMATCH`, `MULTIPLE_INCONSISTENCIES`, `MISSING_MIME`, `INCONCLUSIVE`, etc. Confidence descriptive only. `application/octet-stream` is special-cased.
 
 Strategies: declared/case/parameter/missing-empty/mismatch/custom MIME. Cases: `CATEGORY_MIME`, `TARGET_PART_CONTENT_TYPE` (`MimeVariant.MISSING_SENTINEL` for missing header). Default max candidates **80**.
+
+**GUI:** **Generate MIME Test Plan** toolbar above the table; auto-generate after analyze; MIME-only mutations.
 
 ### 5.4 File Content Validation (Phase 4.4) — `IMPLEMENTED` (planning)
 
@@ -308,6 +312,8 @@ Bounded structure checks:
 | PDF | `%PDF-`, `%%EOF` | Interpreter / JS |
 
 Strategies: truncated, required marker, signature alteration, length boundary, malformed metadata. Cases: `CATEGORY_CONTENT`, `TARGET_PART_CONTENT_BYTES` with SHA-256 + in-memory artifacts.
+
+**GUI:** **Generate Content Test Plan** toolbar above the table; auto-generate after analyze; empty-plan reasons (oversize / unsupported) shown in status.
 
 ### 5.5 Managed Testing / Request Builder (Phase 4.5.1) — `IMPLEMENTED` (prepare only)
 
@@ -397,10 +403,11 @@ Exactly one of: filename · part Content-Type · part body bytes. Unrelated part
 ### GUI workflow
 
 1. Context menu **Send to PathHunter File Upload Analyzer** (retains `IHttpService` + baseline response when available)
-2. Analyze → generate Filename / MIME / Content plans
-3. Managed Testing: Load → Validate → Prepare (in memory)
-4. Authorize Target (Enable + confirmation) → Execute Selected Prepared (second confirm dialog)
-5. Results tab: filter, inspect evidence, export JSON/HTML
+2. Analyze → first file part selected → Filename/MIME/Content plans auto-generated (or click Generate toolbars)
+3. Check **Sel** on candidates → Managed Testing **Load Selected Test Cases**
+4. Validate → Prepare (in memory, never sends)
+5. Authorize Target (Enable + confirmation) → Execute Selected Prepared (second confirm dialog)
+6. Results tab: filter, inspect evidence, export JSON/HTML
 
 ---
 
@@ -436,6 +443,7 @@ Structural or metadata inconsistency is **not** a confirmed vulnerability.
 | `FileContentValidationSmoke` | Phase 4.4 | **91/91** (+2 SKIP) |
 | `ManagedRequestBuilderSmoke` | Phase 4.5.1 prepare | **73/73** (+2 SKIP) |
 | `ControlledExecutionSmoke` | Phase 4.5.2–4.5.4 (mocked HTTP) | **51/51** (+2 SKIP) |
+| `FileUploadWorkflowSmoke` | End-to-end File Upload GUI/engine workflow | **31/31** (+2 SKIP) |
 | `LoadCheck` | JAR / Extender load simulation | **11/11** |
 | `ProveBlock` | Burp loader assignability | Pass |
 | `ScanLikeBurp` | Extender discovery | 1 candidate |
@@ -517,6 +525,7 @@ Concise milestones (see `CHANGELOG.md` for release notes).
 | 2026-11-14 | Phase 4.5.1 Managed prepare | `a4ebc82` | ManagedRequestBuilderSmoke 73/73; JAR ~336 KiB |
 | 2026-11-14 | Docs consolidation | `d7c5513` | Single master document; phase MD files removed; `tools/docs/validate-master-docs.ps1` |
 | 2026-11-14 | Phase 4.5.2–4.5.4 execute/analyze/evidence | `247b495` | ControlledExecutionSmoke 51/51; JAR ~397 KiB |
+| 2026-11-15 | File Upload functional audit / GUI fixes | *(this release)* | Auto-generate plans; Generate toolbars; FileUploadWorkflowSmoke 31/31 |
 
 ---
 
