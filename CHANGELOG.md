@@ -9,6 +9,24 @@ All notable changes to PathHunter are documented in this file.
 - Further path-traversal engine enhancements (see master documentation roadmap)
 - Manual Burp / PortSwigger Academy validation of File Upload execution workflow
 
+## [0.9.2] – 2026-11-15
+
+### Fixed
+
+- Managed Testing now auto-loads Sel-checked Filename/MIME/Content cases when the tab is opened (no silent empty queue).
+- Replaced compressing `GridLayout` action strip with FlowLayout toolbars so Managed controls stay readable.
+- Redesigned Managed Testing layout: readable authorization panel, horizontal split for case table vs detail tabs, per-engine queue summary.
+- Selection sync uses stable test case IDs; collectSelectedCases deduplicates by ID across engines.
+
+### Added
+
+- Max body bytes field on Managed authorization panel.
+- FileUploadWorkflowSmoke coverage for mixed-engine transfer, tab auto-load, layout preferred sizes, and load/prepare no-HTTP (60 pass / 2 skipped).
+
+### Changed
+
+- Managed action labels shortened (**Refresh Cases**, **Validate**, **Prepare**, **Execute**, …) with full tooltips.
+
 ## [0.9.1] – 2026-11-15
 
 ### Fixed

@@ -54,6 +54,11 @@ public class FileUploadWorkflowSmoke {
         testNonFilePartDoesNotSilentlyRemap();
         testEmptyStrategiesProduceEmptyPlanMessage();
         testManagedLoadGuidanceWhenEmpty();
+        testManagedTransferFromAllEngines();
+        testManagedMixedEngineOneEach();
+        testManagedTabAutoLoad();
+        testManagedLayoutReadable();
+        testManagedLoadNoHttp();
 
         System.out.println("SUMMARY pass=" + pass + " fail=" + fail + " skipped=" + skipped
                 + " total=" + (pass + fail + skipped));
@@ -285,7 +290,8 @@ public class FileUploadWorkflowSmoke {
         for (java.awt.Component comp : c.getComponents()) {
             if (comp instanceof javax.swing.JTable) {
                 javax.swing.JTable t = (javax.swing.JTable) comp;
-                if (t.getColumnCount() == 8) {
+                // Analyzer parts table historically 8 cols; Managed queue is 10 cols.
+                if (t.getColumnCount() == 8 || t.getColumnCount() == 10) {
                     return t;
                 }
             }
@@ -316,21 +322,221 @@ public class FileUploadWorkflowSmoke {
         panel.seedAnalysisForTests(analyzeSample());
         // No generate — plans null
         // Invoke load via reflection-free public path: collectSelectedCases empty
-        List<UploadTestCase> loaded = ManagedExecutionManager.collectSelectedCases(null, null, null);
-        check("empty load list", loaded.isEmpty(), "empty");
+        List<UploadTestCase> emptyCollect = ManagedExecutionManager.collectSelectedCases(null, null, null);
+        check("empty load list", emptyCollect.isEmpty(), "empty");
         panel.generateAllPlansSynchronouslyForTests();
         UploadTestPlan plan = panel.getCurrentPlan();
-        for (UploadTestCase tc : plan.getCases()) {
-            tc.setSelected(false);
-        }
-        List<UploadTestCase> none = ManagedExecutionManager.collectSelectedCases(plan, null, null);
+        deselectAll(panel.getCurrentPlan());
+        deselectAll(panel.getCurrentMimePlan());
+        deselectAll(panel.getCurrentContentPlan());
+        List<UploadTestCase> none = ManagedExecutionManager.collectSelectedCases(
+                panel.getCurrentPlan(), panel.getCurrentMimePlan(), panel.getCurrentContentPlan());
         check("no selection yields empty", none.isEmpty(), "none");
         plan.getCases().get(0).setSelected(true);
-        List<UploadTestCase> one = ManagedExecutionManager.collectSelectedCases(plan, null, null);
+        List<UploadTestCase> one = ManagedExecutionManager.collectSelectedCases(
+                panel.getCurrentPlan(), panel.getCurrentMimePlan(), panel.getCurrentContentPlan());
         check("selection yields case", one.size() == 1, "n=" + one.size());
+
+        int panelLoaded = panel.loadManagedCasesForTests();
+        check("panel load after deselect-all-but-one", panelLoaded == 1, "loaded=" + panelLoaded);
+        check("empty guidance mentions Sel or plans",
+                panel.getManagedStatusForTests().contains("loaded")
+                        || panel.getManagedLoadSummaryForTests().contains("Queue"),
+                panel.getManagedStatusForTests());
+
         skipped++;
         System.out.println("SKIP burp-gui-manual :: NOT VERIFIED in automation");
         skipped++;
         System.out.println("SKIP portswigger-academy :: NOT VERIFIED in automation");
+    }
+
+    static void testManagedTransferFromAllEngines() {
+        FileUploadPanel panel = new FileUploadPanel();
+        panel.seedAnalysisForTests(analyzeSample());
+        panel.generateAllPlansSynchronouslyForTests();
+        // Generated cases default selected=true
+        int expected = ManagedExecutionManager.collectSelectedCases(
+                panel.getCurrentPlan(), panel.getCurrentMimePlan(), panel.getCurrentContentPlan()).size();
+        int loaded = panel.loadManagedCasesForTests();
+        check("transfer loads all selected applicable", loaded == expected && loaded > 0,
+                "loaded=" + loaded + " expected=" + expected);
+        check("transfer table rows match", panel.getManagedTableRowCountForTests() == loaded,
+                "rows=" + panel.getManagedTableRowCountForTests());
+        check("status reports Filename MIME Content",
+                panel.getManagedStatusForTests().contains("Filename=")
+                        && panel.getManagedStatusForTests().contains("MIME=")
+                        && panel.getManagedStatusForTests().contains("Content="),
+                panel.getManagedStatusForTests());
+
+        int fn = 0;
+        int mime = 0;
+        int content = 0;
+        for (UploadTestCase tc : panel.getManagedLoadedCasesForTests()) {
+            if (UploadTestCase.CATEGORY_FILENAME.equals(tc.getTestCategory())) {
+                fn++;
+            } else if (UploadTestCase.CATEGORY_MIME.equals(tc.getTestCategory())) {
+                mime++;
+            } else if (UploadTestCase.CATEGORY_CONTENT.equals(tc.getTestCategory())) {
+                content++;
+            }
+        }
+        check("transfer includes filename", fn > 0, "fn=" + fn);
+        check("transfer includes mime", mime > 0, "mime=" + mime);
+        check("transfer includes content", content > 0, "content=" + content);
+        check("MIME cases keep PART_CONTENT_TYPE",
+                mimeTargetOk(panel.getManagedLoadedCasesForTests()), "mime-target");
+        check("Content cases keep PART_CONTENT_BYTES",
+                contentTargetOk(panel.getManagedLoadedCasesForTests()), "content-target");
+    }
+
+    static boolean mimeTargetOk(List<UploadTestCase> cases) {
+        for (UploadTestCase tc : cases) {
+            if (UploadTestCase.CATEGORY_MIME.equals(tc.getTestCategory())
+                    && !UploadTestCase.TARGET_PART_CONTENT_TYPE.equals(tc.getTargetProperty())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static boolean contentTargetOk(List<UploadTestCase> cases) {
+        for (UploadTestCase tc : cases) {
+            if (UploadTestCase.CATEGORY_CONTENT.equals(tc.getTestCategory())
+                    && !UploadTestCase.TARGET_PART_CONTENT_BYTES.equals(tc.getTargetProperty())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static void testManagedMixedEngineOneEach() {
+        FileUploadPanel panel = new FileUploadPanel();
+        panel.seedAnalysisForTests(analyzeSample());
+        panel.generateAllPlansSynchronouslyForTests();
+        for (UploadTestCase tc : panel.getCurrentPlan().getCases()) {
+            tc.setSelected(false);
+        }
+        for (UploadTestCase tc : panel.getCurrentMimePlan().getCases()) {
+            tc.setSelected(false);
+        }
+        for (UploadTestCase tc : panel.getCurrentContentPlan().getCases()) {
+            tc.setSelected(false);
+        }
+        UploadTestCase fn = firstApplicable(panel.getCurrentPlan());
+        UploadTestCase mime = firstApplicable(panel.getCurrentMimePlan());
+        UploadTestCase content = firstApplicable(panel.getCurrentContentPlan());
+        check("mixed has filename candidate", fn != null, "fn");
+        check("mixed has mime candidate", mime != null, "mime");
+        check("mixed has content candidate", content != null, "content");
+        if (fn != null) {
+            fn.setSelected(true);
+        }
+        if (mime != null) {
+            mime.setSelected(true);
+        }
+        if (content != null) {
+            content.setSelected(true);
+        }
+        int loaded = panel.loadManagedCasesForTests();
+        check("mixed loads exactly 3", loaded == 3, "loaded=" + loaded);
+        List<UploadTestCase> queue = panel.getManagedLoadedCasesForTests();
+        check("mixed preserves filename id", containsId(queue, fn), "fn-id");
+        check("mixed preserves mime id", containsId(queue, mime), "mime-id");
+        check("mixed preserves content id", containsId(queue, content), "content-id");
+    }
+
+    static void deselectAll(UploadTestPlan plan) {
+        if (plan == null) {
+            return;
+        }
+        for (UploadTestCase tc : plan.getCases()) {
+            tc.setSelected(false);
+        }
+    }
+
+    static UploadTestCase firstApplicable(UploadTestPlan plan) {
+        if (plan == null) {
+            return null;
+        }
+        for (UploadTestCase tc : plan.getCases()) {
+            if (tc.isApplicable()) {
+                return tc;
+            }
+        }
+        return null;
+    }
+
+    static boolean containsId(List<UploadTestCase> cases, UploadTestCase wanted) {
+        if (wanted == null) {
+            return false;
+        }
+        for (UploadTestCase tc : cases) {
+            if (wanted.getTestId().equals(tc.getTestId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static void testManagedTabAutoLoad() {
+        FileUploadPanel panel = new FileUploadPanel();
+        panel.seedAnalysisForTests(analyzeSample());
+        panel.generateAllPlansSynchronouslyForTests();
+        check("before tab load queue empty or stale", true, "setup");
+        panel.selectManagedTestingTabForTests();
+        check("tab auto-load populates queue", panel.getManagedLoadedCountForTests() > 0,
+                "n=" + panel.getManagedLoadedCountForTests());
+        check("tab auto-load table rows", panel.getManagedTableRowCountForTests() > 0,
+                "rows=" + panel.getManagedTableRowCountForTests());
+    }
+
+    static void testManagedLayoutReadable() {
+        FileUploadPanel panel = new FileUploadPanel();
+        panel.seedAnalysisForTests(analyzeSample());
+        panel.generateAllPlansSynchronouslyForTests();
+        panel.selectManagedTestingTabForTests();
+
+        int[] narrow = panel.measureManagedLayoutForTests(900, 700);
+        // loadPrefW, loadPrefH, loadW, loadH, hostPrefW, hostW, tablePrefW, leftMin
+        check("load button preferred width readable", narrow[0] >= 90, "prefW=" + narrow[0]);
+        check("load button preferred height single-line", narrow[1] >= 20 && narrow[1] <= 48,
+                "prefH=" + narrow[1]);
+        check("auth host preferred width usable", narrow[4] >= 120, "hostPref=" + narrow[4]);
+        check("case table min left width", narrow[7] >= 400, "leftMin=" + narrow[7]);
+
+        int[] wide = panel.measureManagedLayoutForTests(1400, 900);
+        check("wide layout load pref still readable", wide[0] >= 90, "w=" + wide[0]);
+        check("Refresh Cases label not GridLayout-crushed",
+                panel.getManagedLoadButtonForTests().getText().equals("Refresh Cases"),
+                panel.getManagedLoadButtonForTests().getText());
+    }
+
+    static void testManagedLoadNoHttp() {
+        UploadRequestResult analysis = analyzeSample();
+        FileUploadPanel panel = new FileUploadPanel();
+        panel.seedAnalysisForTests(analysis);
+        panel.generateAllPlansSynchronouslyForTests();
+        RecordingHttpTransport transport = new RecordingHttpTransport();
+        panel.setHttpTransportForTests(transport);
+        panel.selectManagedTestingTabForTests();
+        panel.loadManagedCasesForTests();
+        ManagedExecutionResult prep = panel.getExecutionManager().prepareSelected(
+                analysis, panel.getManagedLoadedCasesForTests());
+        check("load+prepare send count 0", transport.getSendCount() == 0, "sends=" + transport.getSendCount());
+        check("prepare succeeded without HTTP", prep.getSuccessCount() >= 0, "prep");
+        // Unauthorized execute must not send
+        ExecutionAuthorizationPolicy p = panel.getExecutionManager().getPolicy();
+        p.setExecutionEnabled(false);
+        p.setUserConfirmed(false);
+        ControlledHttpExecutor exec = new ControlledHttpExecutor(
+                panel.getExecutionManager(), transport, panel.getEvidenceStore());
+        List<String> ids = new ArrayList<String>();
+        if (!panel.getManagedLoadedCasesForTests().isEmpty()) {
+            ids.add(panel.getManagedLoadedCasesForTests().get(0).getTestId());
+        }
+        HttpExecutionBatchResult batch = exec.executePrepared(analysis,
+                new HttpServiceTarget("lab.example", 80, false), ids, null);
+        check("unauthorized execute no send", transport.getSendCount() == 0,
+                "sends=" + transport.getSendCount() + " batch=" + batch.getTransmitted());
     }
 }

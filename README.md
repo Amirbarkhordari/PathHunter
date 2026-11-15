@@ -62,9 +62,9 @@ Rebuild: see master documentation §3 (Installation and Configuration). Prefer `
 
 1. Configure Path Traversal / Absolute Paths / URL Encoding in the PathHunter tab; use Intruder **Path traversal** as needed.
 2. For uploads: prefer context menu **Send to PathHunter File Upload Analyzer** (keeps target service + baseline response).
-3. After Analyze, Filename/MIME/Content plans auto-generate (or click **Generate … Test Plan** above each plan table). Check **Sel** on candidates.
-4. Managed Testing: **Load Selected Test Cases** → Validate → **Prepare** (in memory, never sends).
-5. Enable execution, **Authorize Target**, confirm, then **Execute Selected Prepared** (second confirmation). Review **Results** and export JSON/HTML if needed.
+3. After Analyze, Filename/MIME/Content plans auto-generate (or click **Generate … Test Plan** above each plan table). Keep **Sel** checked on candidates (default checked).
+4. Open **Managed Testing** (auto-loads Sel-checked cases; or click **Refresh Cases**) → Validate → **Prepare** (in memory, never sends).
+5. Enable execution, **Authorize Target**, confirm, then **Execute** (second confirmation). Review **Results** and export JSON/HTML if needed.
 
 Preparation never transmits HTTP. Execution is disabled by default and requires explicit authorization.
 

@@ -319,6 +319,10 @@ Strategies: truncated, required marker, signature alteration, length boundary, m
 
 See [§7](#7-managed-execution-architecture). **Preparation never transmits HTTP.**
 
+**Candidate transfer:** Generated Filename/MIME/Content cases default to **Sel=checked**. `ManagedExecutionManager.collectSelectedCases` gathers selected **applicable** cases from all three plans (deduped by test ID). Opening the **Managed Testing** tab auto-loads that queue; **Refresh Cases** reloads explicitly. Status shows per-engine counts (`Filename=N MIME=M Content=C`). Empty queues explain missing plans / unchecked Sel / not-applicable cases.
+
+**Layout (2026-11-15 repair):** Authorization panel uses readable `GridBagLayout` fields (host/port/batch/delay/max body). Actions use `FlowLayout` toolbars (not a compressing `GridLayout`) so labels stay horizontal. Case table + detail tabs sit in a horizontal `JSplitPane` with minimum widths; request Validation / Preview / Summary / Diff / Notice are tabbed instead of stacked narrow columns.
+
 ### 5.6 Controlled HTTP Execution (Phase 4.5.2) — `IMPLEMENTED`
 
 `ControlledHttpExecutor` sends prepared artifacts through `HttpTransport` (`BurpHttpTransport` → `callbacks.makeHttpRequest`). Defaults disabled; requires Enable + Authorize Target + Execute confirmation. Target host must match analyzed/authorized host. Batch limits and inter-request delays enforced. Duplicate preparation IDs blocked. Cancellation honored between cases. HTTP/2 still rejected.
@@ -404,10 +408,13 @@ Exactly one of: filename · part Content-Type · part body bytes. Unrelated part
 
 1. Context menu **Send to PathHunter File Upload Analyzer** (retains `IHttpService` + baseline response when available)
 2. Analyze → first file part selected → Filename/MIME/Content plans auto-generated (or click Generate toolbars)
-3. Check **Sel** on candidates → Managed Testing **Load Selected Test Cases**
-4. Validate → Prepare (in memory, never sends)
-5. Authorize Target (Enable + confirmation) → Execute Selected Prepared (second confirm dialog)
-6. Results tab: filter, inspect evidence, export JSON/HTML
+3. Keep **Sel** checked on desired candidates (defaults checked; use Select All / Deselect All as needed)
+4. Open **Managed Testing** (auto-loads Sel-checked applicable cases) or click **Refresh Cases**
+5. Validate → Prepare (in memory, never sends)
+6. Authorize Target (Enable + confirmation) → Execute (second confirm dialog)
+7. Results tab: filter, inspect evidence, export JSON/HTML
+
+**Root cause (empty Managed queue before repair):** Transfer logic was correct when **Refresh/Load** ran, but the Managed tab did not auto-load on open, and a `GridLayout(0,3)` action strip crushed long button labels (including Load) into unusable vertical text—so users navigated to an empty queue without a discoverable load action.
 
 ---
 
@@ -443,7 +450,7 @@ Structural or metadata inconsistency is **not** a confirmed vulnerability.
 | `FileContentValidationSmoke` | Phase 4.4 | **91/91** (+2 SKIP) |
 | `ManagedRequestBuilderSmoke` | Phase 4.5.1 prepare | **73/73** (+2 SKIP) |
 | `ControlledExecutionSmoke` | Phase 4.5.2–4.5.4 (mocked HTTP) | **51/51** (+2 SKIP) |
-| `FileUploadWorkflowSmoke` | End-to-end File Upload GUI/engine workflow | **31/31** (+2 SKIP) |
+| `FileUploadWorkflowSmoke` | End-to-end File Upload GUI/engine workflow + Managed transfer/layout | **60/60** (+2 SKIP) |
 | `LoadCheck` | JAR / Extender load simulation | **11/11** |
 | `ProveBlock` | Burp loader assignability | Pass |
 | `ScanLikeBurp` | Extender discovery | 1 candidate |
@@ -526,6 +533,7 @@ Concise milestones (see `CHANGELOG.md` for release notes).
 | 2026-11-14 | Docs consolidation | `d7c5513` | Single master document; phase MD files removed; `tools/docs/validate-master-docs.ps1` |
 | 2026-11-14 | Phase 4.5.2–4.5.4 execute/analyze/evidence | `247b495` | ControlledExecutionSmoke 51/51; JAR ~397 KiB |
 | 2026-11-15 | File Upload functional audit / GUI fixes | `69506fb` | Auto-generate plans; Generate toolbars; FileUploadWorkflowSmoke 31/31 |
+| 2026-11-15 | Managed Testing transfer + layout repair | *(this release)* | Auto-load on tab; FlowLayout actions; FileUploadWorkflowSmoke 60/60 |
 
 ---
 
